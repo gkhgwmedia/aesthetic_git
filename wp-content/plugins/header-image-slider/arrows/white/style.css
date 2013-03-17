@@ -1,0 +1,17 @@
+.theme-default .nivo-directionNav a {
+	width: 30px;
+	height: 44px;
+	/*background: url(arrows/white/arrows-white.png) no-repeat;*/
+}
+.theme-default a.nivo-nextNav {
+	/*background-position: -46px 0;*/
+	background: url(arrows/white/next.png) no-repeat;
+	right: -43px;
+	height:200px;
+}
+.theme-default a.nivo-prevNav {
+	left: -31px;
+	background: url(arrows/white/prev.png) no-repeat;
+	height:200px;
+	width:100px;
+}

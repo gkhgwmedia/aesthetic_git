@@ -1,0 +1,367 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Easy Admin Notification\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-30 11:43+0100\n"
+"PO-Revision-Date: 2012-01-30 11:45+0100\n"
+"Last-Translator: remi\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../easy-theme-options.php:63
+#: ../easy-theme-options.php:186
+msgid "Easy Theme Options Settings"
+msgstr "Paramètres des Options du thème"
+
+#: ../easy-theme-options.php:64
+#: ../easy-theme-options.php:100
+msgid "Theme Options"
+msgstr "Options du thème"
+
+#: ../easy-theme-options.php:192
+msgid "Options saved"
+msgstr "Paramètres enregistrés"
+
+#: ../easy-theme-options.php:205
+msgid "Save Options"
+msgstr "Enregistrer les paramètres"
+
+#: ../includes/help.php:15
+msgid "Add Fields"
+msgstr "Ajouter des champs"
+
+#: ../includes/help.php:16
+msgid "Retrieve Fields Data"
+msgstr "Récupérer les valeurs des champs"
+
+#: ../includes/help.php:17
+msgid "Customs Functions"
+msgstr "Fonctions personnalisées"
+
+#: ../includes/help.php:18
+#: ../includes/help.php:269
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: ../includes/help.php:21
+msgid "How to add new tabs"
+msgstr "Comment ajouter de nouveaux Onglets"
+
+#: ../includes/help.php:22
+msgid "Adding tabs is simple. What you have to do is to edit the includes/options.php file in the plugin directory. Adding a tab and adding a field is a bit different. You have to actions to do when you create a tab. First of all you have to add data in the <code>$eto_custom_tabs</code> var, and then, in the <code>$eto_custom_meta_fields</code> you have to call the Tab starting element and to close this element. Here is an example:"
+msgstr "L'ajout d'onglets est simple. Tout ce que vous avez à faire c'est d'éditer le fichier includes/options.php dans le répertoire du plugin. Ajouter un onglet et ajouter un champ est un peu différent. Vous avez deux actions à faire lorsque vous créez un onglet. Tout d'abord, vous devez ajouter des données dans la variable <code>$eto_custom_tabs</code>, et ensuite, dans la variable <code>$eto_custom_meta_fields</code>, vous devez appeler l'ouverture et la fermeture de l'onglet. Voici un exemple:"
+
+#: ../includes/help.php:23
+msgid "Create the tabs"
+msgstr "Créer des onglets"
+
+#: ../includes/help.php:34
+msgid "Wrap fields into a tab"
+msgstr "Encapsuler des champs dans un onglet"
+
+#: ../includes/help.php:41
+msgid "Your fields here"
+msgstr "Ajouter vos champs ici"
+
+#: ../includes/help.php:48
+msgid "If this seems to be too complicated for you, please just take a look at the options.php file included to have a demo of how to fill in the file."
+msgstr "Si cela vous parait trop compliqué, jetez un oeil au fichier options.php inclus dans le plugin pour avoir un aperçu sur la manière de le remplir."
+
+#: ../includes/help.php:50
+msgid "How to create custom fields"
+msgstr "Comment créer des champs personnalisés"
+
+#: ../includes/help.php:51
+msgid "Creating fields is easy! All you have to do id to edit the includes/options.php file in the plugin directory and create as many tabs and fields as you need!"
+msgstr "La création de champs personnalisés est facile ! Tout ce que vous à faire c'est d'éditer le fichier includes/options.php dans le répertoire du plugin et de créer autant d'onglets et de champs que vous le souhaitez !"
+
+#: ../includes/help.php:53
+msgid "Add a Title"
+msgstr "Ajouter un Titre"
+
+#: ../includes/help.php:60
+msgid "Add a Text input field"
+msgstr "Ajouter un Champs Texte Simple"
+
+#: ../includes/help.php:68
+msgid "Add a Password input field"
+msgstr "Ajouter un champs Mot de Passe"
+
+#: ../includes/help.php:76
+msgid "Add a Textarea field"
+msgstr "Ajouter une Zone de Texte"
+
+#: ../includes/help.php:84
+msgid "Add a Checkbox field"
+msgstr "Ajouter une Case à Cocher"
+
+#: ../includes/help.php:92
+msgid "Add a Select Box"
+msgstr "Ajouter une Liste Déroulante"
+
+#: ../includes/help.php:113
+#: ../includes/help.php:136
+#: ../includes/help.php:159
+msgid "Here you have to add options to the field. Each option has a label and a value."
+msgstr "Ici vous devez ajouter les options du champs. Chaque option doit avoir un lable et une valeur."
+
+#: ../includes/help.php:115
+msgid "Add a Radio Group"
+msgstr "Ajouter des Boutons Radio"
+
+#: ../includes/help.php:138
+msgid "Add a Ckeckbox Group"
+msgstr "Ajouter une Groupe de Cases à Cocher"
+
+#: ../includes/help.php:161
+msgid "Add a Taxonomy list"
+msgstr "Ajouter une Liste de Taxonomies"
+
+#: ../includes/help.php:168
+msgid "Add a Posts list"
+msgstr "Ajouter une Liste d'Articles"
+
+#: ../includes/help.php:176
+msgid "Here you can define the post types you want to list."
+msgstr "Ici vous pouvez définir le type de \"custom post type\" à lister."
+
+#: ../includes/help.php:178
+msgid "Add a Repeatable Field"
+msgstr "Ajouter un Champs Multiple"
+
+#: ../includes/help.php:186
+msgid "Add a Date Field"
+msgstr "Ajouter un Champs Date"
+
+#: ../includes/help.php:194
+msgid "Add a Image Upload Field"
+msgstr "Ajouter un Champs d'Upload d'Image"
+
+#: ../includes/help.php:202
+msgid "Add a Slider Field"
+msgstr "Ajouter un Slider"
+
+#: ../includes/help.php:212
+msgid "Here think to modify the min, max and step values to fit your needs."
+msgstr "Ici pensez à modifier les valeur min, max et step pour vos besoins."
+
+#: ../includes/help.php:214
+msgid "Add a Color Picker Field"
+msgstr "Ajouter un Color Picker"
+
+#: ../includes/help.php:223
+#: ../includes/help.php:248
+#: ../includes/help.php:267
+msgid "top"
+msgstr "Haut de page"
+
+#: ../includes/help.php:225
+msgid "How to retrieve the data fields"
+msgstr "Comment récupérer les données des champs"
+
+#: ../includes/help.php:227
+msgid "There are two ways to retrieve the data, one with a function, and the second one using a global variable. The first method use a little more queries, but is easier to set up. Some field types provide pre-made functions to display the content, for these functions, have a look below."
+msgstr "Il y a deux manières de récupérer la valeur des champs. La première en utilisant une fonction, la seconde en utilisant une variable globale. La première méthode est légèrement plus gourmande en ressource mais est plus simple à mettre en place. Certains types de champs bénéficient de fonctions déja construites qui simplifient l'affichage des données de ces champs (voir plus bas)."
+
+#: ../includes/help.php:229
+msgid "First Method: using a function"
+msgstr "Prmière Méthode: utilisation d'une fonction"
+
+#: ../includes/help.php:231
+msgid "To display a field data using a function, use this function call and echo it:"
+msgstr "Pour afficher la valeur d'un champ via une fonctione utiliser le code ci-dessous puis faites en un \"echo\":"
+
+#: ../includes/help.php:233
+#: ../includes/help.php:244
+msgid "Where you replace <code>var</code> by the id of the field you want to echo."
+msgstr "Où vous devez remplacer <code>var</code> par l'id du champ que vous souhaitez afficher."
+
+#: ../includes/help.php:235
+msgid "Second Method: using a global variable"
+msgstr "Seconde Méthode: utilisation d'une variable globale"
+
+#: ../includes/help.php:237
+msgid "The first thing to do is to insert this lines of code in your header.php file inside your template directory"
+msgstr "La première chose à faire dans cette méthode est de copier ces quelques lignes de codes dans votre header.php qui se trouve dans le répertoire de votre thème"
+
+#: ../includes/help.php:241
+msgid "You really need to add these lines, above the wp_head() function, otherwise the data will not be available in your theme."
+msgstr "Vous devez absolument coller ces lignes au dessus de wp_head(), sinon les données de vos champs ne seront pas disponibles dans votre thème."
+
+#: ../includes/help.php:242
+msgid "Retrieving the data fields is then pretty simple. The main way to do it is to echo a variable:"
+msgstr "La récupération de données pronevant des champs est simple. La principale manière est de faire un echo de la variable:"
+
+#: ../includes/help.php:244
+msgid "For example if you your field has the id \"slogan\", to echo it, use this code:"
+msgstr "Par exemple si votre champs à un ID \"slogan\", piur l'afficher utiliser ce code:"
+
+#: ../includes/help.php:250
+msgid "Custom Functions"
+msgstr "Fonctions Personnalisées"
+
+#: ../includes/help.php:252
+msgid "For some kind of field types, there are some pre-made functions already created to help you display the content of the field."
+msgstr "Pour certains types de champs de donnée, il existe des fonctions déja prêtes à l'emploi pour afficher ou récupérer du contenu."
+
+#: ../includes/help.php:254
+msgid "Image: display an image"
+msgstr "Image: Afficher une image"
+
+#: ../includes/help.php:256
+#: ../includes/help.php:262
+msgid "Function Name"
+msgstr "Nom de la fonction"
+
+#: ../includes/help.php:257
+msgid "This function echo an image and add an option to modify the width and the height. Replace the <i>$field_id</i> by the call to the needed variable. For example, if you field id is \"logo\", the function call is:"
+msgstr "Cette fonction affiche une image et vous permet de modifier la hauteur et la largeur de celle-ci. Remplacez <i>$field_id</i> par l'ID de la variable à afficher. Par exemple, si votre champs à l'ID \"logo\", l'appel de la fonction sera:"
+
+#: ../includes/help.php:260
+msgid "Image: get image url without displaying it"
+msgstr "Image: récupérer l'URL de l'image sans l'afficher"
+
+#: ../includes/help.php:263
+msgid "This function retrieve the image url without printing anything. Replace the <i>$field_id</i> by the call to the needed variable. For example, if you field id is \"logo\", the function call can be (inside an img tag):"
+msgstr "Cette fonction permet de récupérer l'URL de l'image sans l'afficher. Remplacez <i>$field_id</i> par l'ID de la variable à afficher. Par exemple si votre champs à l'ID \"logo\", l'appel de la fonction pourrait être (dans un tag img):"
+
+#: ../includes/help.php:271
+msgid "There are some shortcodes that you can use directly in the content of your pages, or posts, to display the content of the custom theme fields. The main one, is:"
+msgstr "Il existe des shortcodes que vous pouvez utilisez directement dans le contenu de vos pages ou de vos articles pour afficher le contenu de vos champs personnalisés, le principal shortcode est:"
+
+#: ../includes/help.php:273
+msgid "Where you replace <code>field_id</code> by the id of the field you want to display."
+msgstr "Où vous devez remplacer <code>var</code> par l'id du champ que vous souhaitez afficher."
+
+#: ../includes/help.php:275
+msgid "To display an image directly into your posts of pages content use this shortcode:"
+msgstr "Pour afficher une image directement dans le contenu de vos pages ou de vos articles utilisez ce shortcode:"
+
+#: ../includes/help.php:277
+msgid "Where you replace <code>field_id</code> by the id of the image field you want to display."
+msgstr "Où vous devez remplacer <code>var</code> par l'id du champ que vous souhaitez afficher."
+
+#: ../includes/options.php:15
+msgid "General"
+msgstr "Paramètres généraux"
+
+#: ../includes/options.php:19
+msgid "Advanced"
+msgstr "Paramètres avancés"
+
+#: ../includes/functions/eto_functions.php:57
+msgid "Help"
+msgstr "Aide"
+
+#: ../includes/functions/eto_functions.php:149
+#: ../includes/functions/eto_functions.php:168
+msgid "Select"
+msgstr "Choisir"
+
+#: ../includes/functions/eto_functions.php:159
+msgid "Manage"
+msgstr "Gérer"
+
+#: ../includes/functions/eto_functions.php:171
+msgid "page"
+msgstr "page"
+
+#: ../includes/functions/eto_functions.php:172
+msgid "post"
+msgstr "article"
+
+#: ../includes/functions/eto_functions.php:190
+msgid "Choose Image"
+msgstr "Choisir une image"
+
+#: ../includes/functions/eto_functions.php:191
+msgid "Remove Image"
+msgstr "Supprimer l'image"
+
+#: ../includes/functions/eto_functions.php:212
+#: ../includes/functions/eto_functions.php:218
+msgid "Delete"
+msgstr "Supprimer"
+
+#: ../includes/functions/eto_functions.php:221
+msgid "Add"
+msgstr "Ajouter"
+
+#~ msgid "Admin Notification"
+#~ msgstr "Notification"
+
+#~ msgid "Notification management"
+#~ msgstr "Gérer les notifications"
+
+#~ msgid "<a href=\"%1$s\">Hide</a>"
+#~ msgstr "<a href=\"%1$s\">Masquer</a>"
+
+#~ msgid ""
+#~ "Ooop! You activated a notification but you haven't defined any message!"
+#~ msgstr ""
+#~ "Oups ! Vous avez activé une notification mais vous n'avez indiqué aucun "
+#~ "message !"
+
+#~ msgid "Please configure the settings"
+#~ msgstr "Merci de configurer les paramètres ci-dessous"
+
+#~ msgid "Enable notification ?"
+#~ msgstr "Activer l'affichage de la notification ?"
+
+#~ msgid "Check this box to enable the notification message."
+#~ msgstr "Cochez cette case pour activer l'affichage de la notification."
+
+#~ msgid "Enter the message to display"
+#~ msgstr "Entrer le message à afficher"
+
+#~ msgid ""
+#~ "Enter the text you want to display in the notification. HTML code "
+#~ "accepted."
+#~ msgstr ""
+#~ "Entrer le texte que souhaitez afficher dans la notification. Code HTML "
+#~ "accepté."
+
+#~ msgid "To create links use simple quotes."
+#~ msgstr ""
+#~ "Pour créer des liens utilisez des simples quotes (pas de guillemets)."
+
+#~ msgid "Error message ?"
+#~ msgstr "Message d'erreur ?"
+
+#~ msgid ""
+#~ "Check this box to display an error message. If uncheck, the message will "
+#~ "be display as an information."
+#~ msgstr ""
+#~ "Cochez cette case pour afficher un message d'erreur. Si cette case est "
+#~ "décochée, le message affiché sera une information."
+
+#~ msgid "Display \"hide button\" ?"
+#~ msgstr "Afficher le bouton \"masquer\" ?"
+
+#~ msgid ""
+#~ "Check this box to display a \"hide button\" inside the notification box."
+#~ "<br />Each user will have the choice to hide or not the notification"
+#~ msgstr ""
+#~ "Cochez cette case si vous souhaitez afficher le bouton \"masquer\" dans "
+#~ "la notification.<br />Chaque utilisateur aura le choix de masquer la "
+#~ "notification de manière individuelle."
+
+#~ msgid "Notification page(s)"
+#~ msgstr "Pages d'affichage"
+
+#~ msgid "Choose where you want to display the notification."
+#~ msgstr "Choisissez où vous souhaitez afficher la notification."
+
+#~ msgid "Dashboard Only"
+#~ msgstr "Tableau de bord uniquement"
+
+#~ msgid "Only display to Admins ?"
+#~ msgstr "N'afficher qu'aux administrateurs ?"
+
+#~ msgid "Check this box to display notice only to Admins"
+#~ msgstr "Cochez cette case pour n'afficher qu'aux administrateurs"

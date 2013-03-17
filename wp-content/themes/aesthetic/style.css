@@ -1,0 +1,1347 @@
+/*
+Theme Name: Aesthetic Today
+Theme URI: http://hgwmedia.com
+Author: HGW Media
+Author URI: http://hgwmedia.com
+Description: Deal with the deals
+Version: 1.0
+*/
+@font-face {
+    font-family: 'dinregular';
+    src: url('font/dinregular-webfont.eot');
+    src: url('font/dinregular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/dinregular-webfont.woff') format('woff'),
+         url('font/dinregular-webfont.ttf') format('truetype'),
+         url('font/dinregular-webfont.svg#dinregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'dinbold';
+    src: url('font/din_bold-webfont.eot');
+    src: url('font/din_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/din_bold-webfont.woff') format('woff'),
+         url('font/din_bold-webfont.ttf') format('truetype'),
+         url('font/din_bold-webfont.svg#dinbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+				font-family: 'DINPro-Medium';
+				src: url('font/dinpromedium.eot');
+				src: url('font/dinpromedium.eot?#iefix') format('embedded-opentype'),
+						 url('font/dinpromedium.woff') format('woff'),
+						 url('font/dinpromedium.ttf') format('truetype'),
+						 url('font/dinpromedium.svg#dinpromedium') format('svg');
+				font-weight: normal;
+				font-style: normal;
+		}
+
+/* COMMON CSS */
+
+body {
+	background:url(images/body_bg.png) repeat;
+	margin:0;
+	padding:0;
+	font-family:"dinregular";
+	font-weight:normal;
+	font-size:12px;
+}
+
+html > body{
+	font-size:9.5pt;
+}
+html{
+min-height: 100%;
+height:auto;
+}
+
+form,table,p,h1,h2,h3,h4,h5,h6,ul,li,div,dl{
+margin:0;
+padding:0;
+}
+
+li{
+padding:0;
+margin:0;
+list-style:none;
+}
+
+a{
+	text-decoration:none;
+	outline:none;
+}
+
+a:hover {
+	text-decoration:none;
+}
+
+img{
+	border:0;
+	outline:0;
+}
+
+/* CSS Clearfix */
+.clearfix:after {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+}
+
+.clearfix {display: inline-table;}
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+
+.clsFloatLeft{
+float:left;
+}
+
+.clsFloatRight{
+float:right;
+}
+.clear {
+clear:both;
+}
+
+input[type="submit"] {
+	cursor: pointer;
+}
+/* EOF Common CSS */
+
+#top_ribbon
+{
+	background:url(images/sliderbar_bg.jpg) repeat;
+	height:12px;
+}
+
+
+#wrapper
+{
+	/*width:1024px;*/
+	margin:0px auto;
+	/*padding-bottom:15px;*/
+}
+
+#wrapper #header
+{
+	margin:0px auto;
+	height:134px;
+	width:1024px;
+}
+
+#wrapper #header .logo
+{
+	width:311px;
+}
+ 
+#wrapper #header .header-right
+{
+	width:700px;
+	height:134px;
+	position:relative;
+}
+ 
+#wrapper #header .header-right .social_nav
+{
+	background:url(images/sliderbar_bg.jpg) repeat;
+	height:32px;
+	width:400px;
+	position:absolute;
+	top:0px;
+	right:0px;
+}
+
+.header-right .social_nav .social
+{
+	width:225px;
+	padding-left:10px;
+}
+
+.social .clsSocialLabel
+{
+	font-family:"dinregular";
+	font-size:11px;
+	color:#fff;
+	 margin: 8px 8px 0 0px;
+}
+
+.social .socialIcons
+{
+	margin-top:2px;
+}
+
+.social .socialIcons li
+{
+	float:left;	
+}
+
+.social .socialIcons li a
+{
+	display:block;
+	height:25px;
+	width:28px;
+	background:url(images/socialIcons.png) no-repeat;
+	margin:0px 3px;
+}
+
+.social .socialIcons li a.twitter
+{
+	background-position:0px 0px;
+}
+.social .socialIcons li a.twitter:hover
+{
+	background-position:0px -26px;
+}
+
+.social .socialIcons li a.facebook
+{
+	background-position:-32px 0px;
+}
+
+.social .socialIcons li a.facebook:hover
+{
+	background-position:-32px -26px;	
+}
+
+.social .socialIcons li a.youtube
+{
+	background-position:-64px 0px;
+}
+
+.social .socialIcons li a.youtube:hover
+{
+	background-position:-64px -26px;
+}
+
+
+
+.header-right .social_nav .search
+{
+	background:url(images/search_bg.png) no-repeat;
+	width:151px;
+	height:22px;
+	margin-top: 5px;
+}
+
+.social_nav .search .txtsearch
+ {
+	border-color: transparent;
+	margin-top: 2px;
+	outline: 0px;
+	background-color: transparent;
+	font-family:"dinregular";
+	font-size: 11px;
+	color: #b7b9bb;
+	float: left;
+	width: 125px;
+	height:17px;
+	padding-left:5px;
+}
+
+.social_nav .search .search_button 
+{
+	background: transparent url(images/magnifier.png) 0px 0px no-repeat;
+	border: 0px;
+	width: 12px;
+	height: 12px;
+	margin: 4px 4px 0;
+}
+
+#wrapper #header .header-right .menu_nav
+{
+	position:absolute;
+	right:0px;
+	bottom:10px;
+	height:30px;
+}
+
+#header .header-right .menu_nav ul {
+	margin-right:15px;
+}
+
+#header .header-right .menu_nav li {
+	float: left;
+	text-align:center;
+	margin-left:30px;
+}
+
+
+#header .header-right .menu_nav li:hover, #header .header-right .menu_nav li.active {
+	background-color:#000000;
+}
+
+#header .header-right .menu_nav li:hover a, #header .header-right .menu_nav li.active a{
+	color: #fff;
+}
+
+#header .header-right .menu_nav li:hover .subtext, #header .header-right .menu_nav li.active .subtext{
+	color: #c2a852;
+}
+
+#header .header-right .menu_nav li a {
+	display:block;
+	color:#000;
+	font-family:"dinregular";
+	font-size:18px;
+	text-transform:uppercase;
+	width: 100px;
+}
+
+#header .header-right .menu_nav li .subtext
+{
+	font-family:"dinregular";
+	font-size:11px;
+	color:#333;
+	
+}
+
+
+
+#wrapper #slider
+{
+	position:relative;
+	padding-bottom:20px;
+	background:#fff;
+	/*width:1024px;*/
+	/*background:url(images/sliderbar_bg.jpg) repeat;*/
+}
+/*#wrapper #slider .slider-inner{
+	margin:0 auto;
+	width:934px;
+	height:399px;
+}*/
+#slider .slider-wrapper{
+	height:399px;
+	background:#fff;
+}
+#slider .slider-wrapper .nivoSlider{
+	margin:0 auto;
+	width:934px !important;
+}
+#wrapper #slider img{
+	margin: 0 auto;
+	width:961px;
+	height:404px;
+}
+#wrapper .sub_nav
+{
+	height:40px;
+	background:url(images/deals_bg.png) repeat;
+	/*margin-top:20px;
+	margin-bottom:20px;*/
+}
+
+#wrapper .sub_nav ul {
+	width:1033px;
+	margin:0 auto;
+	max-width:1033px;
+}
+
+#wrapper .sub_nav li {
+	float: left;
+	text-align:center;
+	margin-left:30px;
+	line-height:40px;
+}
+
+#wrapper .sub_nav li a {
+	display:block;
+	color:#000;
+	font-family:"DINPro-Medium";
+	font-size:16px;
+	text-transform:uppercase;
+}
+
+#wrapper .sub_nav li a:hover {
+	text-decoration:none;
+	color: #908a8a;
+}
+
+#wrapper .sub_nav li a.active {
+	text-decoration:none;
+	color: #908a8a;
+}
+
+#content-wrapper{
+	background:url(images/at_bg_pattern.jpg) repeat 0 0;
+	padding-top:20px;
+}
+
+#wrapper #home_content
+{
+	margin:0px auto;
+	width:1024px;
+}
+
+#wrapper #home_content li
+{	
+	float:left;
+	width:240px;
+	padding-right:20px;
+	padding-bottom:10px;
+}
+#wrapper #home_content li img{
+	min-width:240px;
+	min-height:240px;
+}
+#wrapper #home_content li.lastchild
+{
+	padding-right:0px!important;
+}
+
+#wrapper #home_content li h1
+{
+	font-size:16px;
+	padding-top:12px;
+	text-transform:uppercase;
+	color:#fff;
+	font-family:"DINPro-Medium";
+	text-align:center;
+}
+
+#wrapper #home_content li .nav
+{
+	margin-top:10px;
+}
+
+/************** Buy Deals ******************/
+
+#wrapper #buy_deals
+{
+	width:1024px;
+	padding-bottom:10px;
+	margin:0 auto;
+}
+
+
+
+#buy_deals .deal_info
+{
+	width:1024px;
+}
+
+#buy_deals .deal_info .deal_img
+{
+	padding-bottom:5px;
+}
+
+#buy_deals .deal_info .deal_head
+{
+	height:75px;
+	background-color:#000000;
+	margin-bottom:5px;
+}
+
+#buy_deals .deal_info .deal_head h1
+{
+	color:#fff;
+	font-family:"DINPro-Medium";
+	font-size:40px;
+	line-height:75px;
+	text-transform:uppercase;
+	padding-left:10px;
+}
+#wrapper #buy_deals .content{
+	min-height:500px;
+}
+
+#wrapper #buy_deals .left_side_menu
+{
+	width:245px;
+}
+
+#wrapper #buy_deals .left_side_menu 
+{
+	width:245px;
+}
+
+#buy_deals .left_side_menu .buy_opt li
+{
+	height:42px;
+	line-height:42px;
+	margin-bottom:5px;
+}
+
+#buy_deals .left_side_menu .buy_opt li.gray_bg
+{
+	background:url(images/deals_bg.png) repeat;
+	color:#000;
+	font-family:"DINPro-Medium";
+	font-size:14px;
+	padding-left:15px;
+
+}
+
+#buy_deals .left_side_menu .buy_opt li.yellow_bg
+{
+	background:url(images/yello_bg.jpg) repeat;
+	color:#fff;
+	font-family:"DINPro-Medium";
+	font-size:24px;
+	padding-left:15px;
+	
+}
+
+#buy_deals .left_side_menu .social 
+{
+	margin:10px 10px;
+}
+
+#buy_deals .left_side_menu .social li
+{
+	float:left;	
+}
+
+#buy_deals .left_side_menu .social li a
+{
+	display:block;
+	height:40px;
+	width:40px;
+	/*background:url(images/socialIcons.png) no-repeat;*/
+	margin:0px 3px;
+}
+
+#buy_deals .left_side_menu .social li a.facebook-share{
+	background:url(images/fb-share.png) no-repeat 0 0;
+}
+#buy_deals .left_side_menu .social li a.twitter-share{
+	background:url(images/tw-share.png) no-repeat 0 0;
+}
+#buy_deals .left_side_menu .social li a.pin-share{
+	background:url(images/pin-share.png) no-repeat 0 0;
+}
+#buy_deals .left_side_menu .social li a.twitter
+{
+	background-position:0px 0px;
+}
+#buy_deals .left_side_menu .social li a.twitter:hover
+{
+	background-position:0px -26px;
+}
+
+#buy_deals .left_side_menu .social li a.facebook
+{
+	background-position:-32px 0px;
+}
+
+#buy_deals .left_side_menu .social li a.facebook:hover
+{
+	background-position:-32px -26px;	
+}
+
+#buy_deals .left_side_menu .social li a.pin
+{
+	background-position:-64px 0px;
+}
+
+#buy_deals .left_side_menu .social li a.pin:hover
+{
+	background-position:-64px -26px;
+}
+
+
+
+#buy_deals .content
+{
+	width:760px;
+	background:url(images/deals_bg.png) repeat;
+	padding:8px;
+}
+
+#buy_deals .content
+
+#buy_deals .content h1
+{
+	font-family:"DINPro-Medium";
+	font-size:18px;	
+	text-transform:uppercase;
+	padding-bottom:15px;
+}
+
+#buy_deals .content p
+{
+	font-family:"DINPro-Medium";
+	font-size:16px;	
+	padding-bottom:15px;
+}
+/******** Popup Register */
+#popup_register
+{
+	background:url(images/reg_bg.png) no-repeat;
+	height:538px;
+	width:538px;
+	position:relative;
+	text-align:center;
+}
+
+#popup_register .reg_form
+{
+    bottom: 30px;
+    left: 167px;
+    position: absolute;
+    width: 200px;
+}
+
+#popup_register .reg_form .formField
+{
+	width:200px;
+	height:25px;
+}
+
+#popup_register .reg_form input[type='text']
+{
+	width:182px;
+	height:20px;
+	background:url(images/reg_pop_text.png) no-repeat;
+	border:none;
+	margin:0px 0px 8px 0px;
+	font-family:"DINPro-Medium";
+	font-size:12px;	
+	text-align:center;	
+}
+
+#popup_register .reg_form .btnSubmit
+{
+	border:none;
+	background-color:#cccc66;
+	width:91px;
+	height:18px;
+	line-height:18px;
+	font-size:10px;
+	color:#000;
+	text-transform:uppercase;
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+	border-radius: 50px;
+	-moz-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+#popup_register .reg_form  .btnSubmit:hover
+{
+	background-color:#ccc;
+}
+
+#popup_register .reg_form .bottom
+{
+	border-top: dotted 4px #cccc66;
+	margin-top:15px;
+}
+
+#popup_register .reg_form .bottom a
+{
+	color: #cccc66;
+	font-family:"DINPro-Medium";
+	font-size:10px;
+}
+
+#popup_register .reg_form .bottom a span
+{
+	line-height:20px;
+	display:block;	
+}
+
+/*********** Popup Friend ***************/
+
+#popup_friend
+{
+	width:530px;
+	margin:20px auto 0;
+}
+
+#popup_friend h1
+{
+	font-family:"DINPro-Medium";
+	font-size:18px;	
+	text-transform:uppercase;
+	padding-bottom:15px;
+}
+
+#popup_friend label
+{
+	width:100px;
+}
+
+#popup_friend .form
+{
+	margin-bottom:20px;
+}
+
+#popup_friend .form .clsFormField
+{
+	padding-bottom:15px;
+	width:560px;
+}
+
+#popup_friend .form label
+{
+	padding-right:30px;
+    text-transform: uppercase;
+	font-family:"DINPro-Medium";
+	font-size:18px;	
+	text-transform:uppercase;
+	padding-bottom:15px;
+}
+
+#popup_friend .form input[type="text"]
+{
+	border:none;
+	outline:none;
+    height: 29px;
+    width: 420px;
+	float: right;
+	font-family:"DINPro-Medium";
+	font-size:14px;
+	padding-left:5px;
+}
+
+.emailsmall
+{
+	width:350px !important;
+}
+
+#popup_friend .form textarea
+{
+	border:none;
+	outline:none;
+    height: 99px;
+    width: 420px;
+	float: right;
+	font-family:"DINPro-Medium";
+	font-size:14px;
+	padding-left:5px;
+	padding-bottom:10px;
+}
+
+#popup_friend .form span
+{
+	font-family:"DINPro-Medium";
+	font-size:12px;
+}
+
+
+/************** Our Deals ******************/
+
+#wrapper #our_deals
+{
+	width:1024px;
+	padding-bottom:10px;
+	margin:0 auto;
+}
+
+#wrapper #our_deals .left_side_menu
+{
+	width:245px;
+}
+
+#wrapper #our_deals .left_side_menu h1
+{
+	background:url(images/yello_bg.jpg) repeat;
+	text-transform:uppercase;
+	font-family:"DINPro-Medium";
+	font-size:17px;
+	color:#fff;
+	 height: 40px;
+    line-height: 40px;
+	padding-left:19px;
+}
+
+
+#wrapper #our_deals .left_side_menu .category
+{
+	width:245px;
+	/*height:520px;*/
+	background:url(images/deals_bg.png) repeat;
+	margin-bottom:10px;
+}
+
+#our_deals .left_side_menu .category li
+{
+	height:42px;
+}
+
+#our_deals .left_side_menu .category li:hover
+{
+	background:url(images/sliderbar_bg.jpg) repeat;
+}
+
+#our_deals .left_side_menu .category li:hover a
+{
+	color:#c2a852;
+}
+
+#our_deals .left_side_menu .category li.active
+{
+	background:url(images/sliderbar_bg.jpg) repeat;
+}
+
+#our_deals .left_side_menu .category li.active a
+{
+	color:#c2a852;
+}
+
+#our_deals .left_side_menu .category li a
+{
+	line-height:42px;
+	padding-left:20px;
+	font-family:"DINPro-Medium";
+	font-size:16px;
+	color:#000;
+	text-transform:uppercase;
+}
+
+
+#wrapper #our_deals .left_side_menu .range
+{
+	width:245px;
+	height:125px;
+	background:url(images/deals_bg.png) repeat;
+	margin-bottom:10px;
+}
+
+#wrapper #our_deals .left_side_menu .featured
+{
+	width:245px;
+	min-height:245px;
+	background:url(images/deals_bg.png) repeat;
+	margin-bottom:10px;
+}
+
+#wrapper #our_deals .content
+{
+	width:760px;
+	background:url(images/deals_bg.png) repeat;
+	padding-left:10px;
+	padding-top:10px;
+}
+
+#wrapper #our_deals .content li
+{	
+	float:left;
+	width:240px;
+	padding-right:10px;
+	padding-bottom:10px;
+	position:relative;
+}
+
+#wrapper #our_deals .content li.lastchild
+{
+	padding-right:0px!important;
+}
+
+#wrapper #our_deals .content li h1
+{
+	font-size:16px;
+	text-transform:uppercase;
+	color:#fff;
+	font-family:"DINPro-Medium";
+	text-align:center;
+}
+
+#wrapper #our_deals .content li h2
+{
+	font-size:14px;
+	color:#fff;
+	font-family:"DINPro-Medium";
+	text-align:center;
+}
+
+#wrapper #our_deals .content .before_price
+{
+	color:#999999;
+}
+
+
+.mosaic-block .like
+{
+	position:absolute;
+}
+.mosaic-block .like{
+	opacity: 0;
+	transition: opacity 500ms;
+	-moz-transition: opacity 500ms;
+	-webkit-transition: opacity 500ms;
+	-o-transition: opacity 500ms;
+}
+.mosaic-block:hover .like{
+	opacity: 1;
+}
+.mosaic-block .like a
+{
+	width:26px;
+	height:24px;
+	display:block;
+	background:url(images/Like_normal.jpg) no-repeat;
+}
+#wrapper #our_deals .content li .new{
+	background:url(images/deal-new.png) no-repeat 0 0;
+	height:64px;
+	width:64px;
+	position:absolute;
+	z-index:1000;
+	top:-9px;
+	right:0;
+}
+
+.mosaic-block .like a:hover, .mosaic-block .like a.wishlist-remove
+{
+	background:url(images/Like_select.jpg) no-repeat;
+}
+
+#wrapper #our_deals .content li .nav
+{
+	margin-top:10px;
+}
+
+
+
+
+/**************** Static Page's common page */
+
+#wrapper #static_page
+{
+	width:1024px;
+	padding-bottom:10px;
+	margin:0 auto;
+}
+
+#wrapper #static_page .left_side_menu
+{
+	width:280px;
+	background:url(images/deals_bg.png) repeat;
+}
+#wrapper #static_page .left_side_menu h1{
+	display:none;
+}
+#wrapper #static_page .content
+{
+	width:722px;
+	background:url(images/deals_bg.png) repeat;
+	padding-left:10px;
+	padding-top:10px;
+	min-height:500px;
+}
+
+#wrapper #static_page .left_side_menu li
+{
+	height:42px;
+}
+
+#wrapper #static_page .left_side_menu li:hover, #wrapper #static_page .left_side_menu li.current_page_item, #wrapper #static_page .left_side_menu li.active
+{
+	background:url(images/sliderbar_bg.jpg) repeat;
+}
+
+#wrapper #static_page .left_side_menu li:hover a, #wrapper #static_page .left_side_menu li.current_page_item a, #wrapper #static_page .left_side_menu li.active a
+{
+	color:#c2a852;
+}
+
+#wrapper #static_page .left_side_menu li a
+{
+	line-height:42px;
+	padding-left:20px;
+	font-family:"DINPro-Medium";
+	font-size:16px;
+	color:#000;
+	text-transform:uppercase;	
+}
+
+#wrapper #static_page .content h1
+{
+	font-family:"DINPro-Medium";
+	font-size:16px;	
+	text-transform:uppercase;
+	padding-bottom:10px;
+}
+
+#wrapper #static_page .content p
+{
+	font-family:"DINPro-Medium";
+	font-size:14px;	
+	padding-bottom:10px;
+}
+
+/******************* My Account */
+
+#wrapper #static_page .content .register_form
+{
+	width:600px;
+}
+
+
+.content .register_form .clsFormField
+{
+	width:520px;
+	height:40px;
+	padding-bottom:10px;
+}
+.content .register_form .clsFormField .clsInput 
+{
+	height:40px;
+    line-height: 40px;
+    margin-left: 10px;
+	position:relative;
+	width:353px;
+}
+
+.content .register_form .label
+{
+	width:150px;
+	text-align:right;
+    font-family:"DINPro-Medium";
+	font-size:14px;	
+	line-height:40px;
+}
+
+.content .register_form .clsInput input[type="text"], .content .register_form .clsInput input[type="password"]
+{
+	border:none;
+	outline:none;
+	background:url(images/reg_txt_bg.png) no-repeat;
+    height: 40px;
+    width: 353px;
+	float: right;
+	font-family:"DINPro-Medium";
+	font-size:14px;
+	padding-left:5px;
+}
+
+.content .register_form .clsInput .clsSelect
+{
+	border:none;
+	outline:none;
+	background:url(images/reg_txt_bg.png) no-repeat;
+    width: 353px;
+	height:35px;
+	font-family:"DINPro-Medium";
+	font-size:14px;
+	padding-left:5px;
+	padding-top: 5px;
+	float: right;
+}
+
+.content .register_form .clsInput input[type="submit"]
+{
+	margin-left:15px;
+	font-family:"DINPro-Medium";
+	font-size:15px;
+}
+.content .register_form .clsInput a
+{
+	color:#000000;
+	font-family:"DINPro-Medium";
+	font-size:14px;
+}
+
+.red {
+	color: #f70000;
+}
+
+.divider
+{
+	border-top: dotted 4px #000;
+	height:8px;
+	margin-bottom: 15px;
+    margin-top: 15px;
+}
+/************************ Footer Area ************************/
+
+#footer {
+	border-top:1px solid #1c1c20;
+	background-color:#1c1c20;
+	height:220px;
+}
+#footer .inner {
+	width:950px;
+	margin: 20px auto 0;
+	vertical-align:middle;
+	background-color:#ccc;
+}
+
+#footer .inner .tab
+{
+	width:300px;
+	margin-right:10px;
+	margin-top: 10px;
+}
+
+#footer .inner .tab h1
+{
+	font-family:"DINPro-Medium";
+	font-size:18px;
+	color:#cbcbcb;
+	text-transform:uppercase;
+}
+#footer .inner .tab h2
+{
+	font-family:"DINPro-Medium";
+	font-size:14px;
+	color:#858585;
+	font-weight:normal;
+	padding-bottom:10px;
+	padding-top:10px;
+}
+
+
+
+#footer .inner .tab input[type="text"]
+{
+	background:none;
+	border:none;
+	outline:none;
+    height: 22px;
+    width: 144px;
+	background:url(images/footer_textbox.png) no-repeat;
+	font-family:"DINPro-Medium";
+	font-weight:normal;
+	font-size:14px;	
+}
+
+#footer .inner .tab .btnNlsubmit
+{
+	border:none;
+	background:none;
+	outline:none;
+	background-color:#fff;
+	width:70px;
+	height:22px;
+	font-family:"DINPro-Medium";
+	font-weight:normal;
+	font-size:12px;	
+	color:#ccc;
+	-moz-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+#footer .inner .tab .btnNlsubmit:hover
+{
+	background-color:#908a8a;
+}
+
+
+#footer .inner .tab ul
+{
+	margin-top:10px;
+}
+
+#footer .inner .tab li
+{
+	list-style:none;
+	padding-bottom:5px;
+	font-family:"DINPro-Medium";
+	font-weight:normal;
+	font-size:14px;
+	color:#fff;
+}
+
+#footer-bottom {
+	border-top:2px solid #121212;
+	background-color:#121212;
+	height:33px;
+}
+
+#footer-bottom .inner {
+	width:950px;
+	margin: 5px auto;
+	vertical-align:middle;
+	font-family:"DINPro-Medium";
+	font-weight:normal;
+	font-size:14px;
+	color:#999999;
+}
+
+#footer-bottom .inner .copyright
+{
+	width:400px;
+}
+
+#footer-bottom .inner .footerNav
+{
+	width:400px;
+	text-align:right;
+	font-size:12px;
+}
+
+#footer a, #footer-bottom a
+{	
+	color:#999999;
+}
+
+#footer a:hover, #footer-bottom a:hover
+{	
+	color:#999999;
+	cursor:pointer;
+}
+
+
+
+/********* Common  */
+
+.btnSubmit
+{
+	border:none;
+	background-color:#26262c;
+	width:91px;
+	height:30px;
+	line-height:30px;
+	font-size:12px;
+	color:#fff;
+	-moz-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.btnSubmit:hover
+{
+	background-color:#ccc;
+}
+
+
+.clsCenter
+{
+	text-align:center;
+}
+
+.btnNav
+{
+	border:none;
+	background-color:#26262c;
+	display:block;
+	width:90px;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	font-size:12px;
+	font-family: 'DINPro-Medium';
+	color:#fff;
+	-moz-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.btnNav:hover
+{
+	background-color:#ccc;
+}
+
+
+
+.readmorebtn
+{
+	border:none;
+	background-color:#3f1e00;
+	width:91px;
+	height:30px;
+	display:block;
+	line-height:30px;
+	text-align:center;
+	text-transform:uppercase;
+	font-family:"LucidaSans";
+	font-size:12px;
+	-moz-border-radius: 6px;
+	border-radius:6px;
+	color:#fff;
+	-moz-transition: all 0.5s ease-in-out;
+	-webkit-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.readmorebtn:hover
+{
+	background-color:#e9672b;
+}
+.loader{
+	min-height:924px;
+}
+.loading{
+	background:url(images/ajax-loader.gif) no-repeat center top;
+}
+.price-range{
+	position:relative;
+}
+#slider-range{
+	width:205px;
+	margin:16px auto;
+	height:6px;
+}
+#slider-range .ui-slider-handle{
+	background:url(images/range-left.png) no-repeat 0 -2px;
+	width:24px;
+	height:24px;
+	position:absolute;
+	cursor:pointer;
+	border:none;
+	top:-6px;
+}
+#slider-range .ui-slider-range{
+	background:#737272;
+}
+.range-tooltip{
+	position: absolute;  
+    display: block;  
+    color: #64666A;
+    font-family: 'DINPro-Medium';
+    font-size: 14px;
+    height: 27px;
+    line-height: 27px;
+}
+#filter_cat option, #filter_alpha option{
+	background:#d2d2d4;
+	color: #64666A;
+    font-family: 'DINPro-Medium';
+    font-size: 14px;
+    height: 27px;
+    line-height: 27px;
+    padding: 0 10px;
+}
+form span.error{
+	position:absolute;
+	right:7px;
+	color:#FF0000;
+}
+.display_block{
+	display:block;
+}
+.display_none{
+	display:none;
+}
+.action-load{
+	background:url(images/ajax-loader_face.gif) no-repeat 0 0;
+	height:16px;
+	width:16px;
+}
+.action-msg{
+}
+#searchform p { position:relative }
+#searchform label { position:absolute; top:4px; left:5px}
+
+#dealdescription_ifr{
+	background:#fff;
+	height:227px !important;
+}
+.clsFormField.editor{
+	width:710px !important;
+	height:350px !important;
+}
+.clsInput.field-editor{
+	width:549px !important;
+}
+div.err-msg{
+	margin: 5px 0 15px;
+	background-color: #FFFFE0;
+    border-color: #E6DB55;
+	padding:5px;
+}
