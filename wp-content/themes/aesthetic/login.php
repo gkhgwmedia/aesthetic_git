@@ -44,19 +44,11 @@
 					<div class="clear"></div>
 					
 					<div class="clsFormField">
-					<br />
 						<div class="label clsFloatLeft">&nbsp;</div>
 						 <div class="clsInput clsFloatLeft">
 						 	<?php wp_nonce_field( 'aes_login_action', 'aes_login' ); ?>
 							<input type="submit" name="login_submit" id="login_submit" value="Submit" class="btnSubmit"  />
-						</div>
-					</div>
-					<div class="clear"></div>
-					<div class="clsFormField">
-					<br />
-						<div class="label clsFloatLeft">&nbsp;</div>
-						 <div class="clsInput clsFloatLeft">
-							<a href="<?php echo get_page_link( 150 ); ?>">Register</a> | <a href="<?php echo wp_lostpassword_url(); ?>">forgot password?</a>
+							<div class="login-link"><a href="<?php echo get_page_link( 150 ); ?>">Register</a> | <a href="<?php echo wp_lostpassword_url(); ?>">Forgot Password?</a></div>
 						</div>
 					</div>
 					<div class="clear"></div>

@@ -6,11 +6,33 @@
 			<div class="tab clsFloatLeft">
 				<h1>AESTHETIC TODAY NEWS</h1>
 				<h2>Subscribe to our Daily Newsletter!</h2>
-				<form>
-					<input type="text" id="nlsubmit"  />
-					<input type="submit" id="nlsubmit" value="SUBMIT" class="btnNlsubmit"/>
+				<script>
+					jQuery(document).ready(function($){
+						jQuery( '#subscribe_form' ).validate({
+							errorElement: 'span',
+							rules:{
+								sub_email: { required: true, email: true }
+							},
+							submitHandler: function(){
+							
+								$.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', $('#subscribe_form').serialize(), function(data){
+									var retObj = $.parseJSON( data );
+									
+									new Messi( retObj.message, { closeButton: false } );
+									setTimeout( 'messiClose()', 2000 );
+								} );
+							}
+						});
+					});
+				</script>
+				<form name="subscribe_form" id="subscribe_form" action="" method="post">
+					<p>
+						<input type="text" id="sub_email" name="sub_email" />
+						<input type="hidden" name="action" value="add_subscription" />
+						<input type="submit" id="nlsubmit" value="SUBMIT" class="btnNlsubmit"/>
+					</p>
 				</form>	
-				<h2>Follow Us on: <a target="_blank" href="<?php echo eto_get_option( 'eto_facebook_url' ); ?>">Facebook</a> • <a target="_blank" href="<?php echo eto_get_option( 'eto_twitter_url' ); ?>">Twitter</a></h2>
+				<h2>Follow Us on: <a target="_blank" href="<?php echo eto_get_option( 'eto_facebook_url' ); ?>">Facebook</a><span class="bull">&bull;</span><a target="_blank" href="<?php echo eto_get_option( 'eto_twitter_url' ); ?>">Twitter</a></h2>
 			</div>
 			<div class="tab clsFloatLeft">
 					<?php

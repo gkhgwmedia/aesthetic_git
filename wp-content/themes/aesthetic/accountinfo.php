@@ -11,11 +11,7 @@
 	<script>
 		jQuery(document).ready(function($){
 			var tab = 'profile';
-			<?php if( $_POST['deal_submit'] ){ ?>
-				tab = 'add_deal';
-			<?php } ?>
 			showHide( tab );
-			
 			
 			// profile update
 			jQuery( '#profile_form' ).validate({
@@ -75,7 +71,7 @@
 				}
 			});
 			
-			// Add a deal validation
+			// Add a deal validation and submition
 			jQuery( '#add_deal_form' ).validate({
 				errorElement: 'span',
 				rules:{
@@ -83,13 +79,35 @@
 					price: { required: true, number: true },
 					special_price: { required: true, dealPrice: '#price' },
 					end_time: { required: true }
-				}/*,
+				},
 				submitHandler: function(){
-					alert( tinymce.get( 'dealdescription' ).getContent() );
-					$.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', $('#add_deal_form').serialize(), function(data){
-						alert( data );
-					} );
-				}*/
+					actionShow( '#add_deal_form .action-msg' );
+				
+					//alert( tinymce.get( 'dealdescription' ).getContent() );
+					$.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', 
+						{
+							action: 'add_merchant_deal',
+							post_id: $( '#add_deal_form #post_id' ).val(),
+							title: $( '#add_deal_form #title' ).val(),
+							desc: tinymce.get( 'dealdescription' ).getContent(),
+							cat: $( '#add_deal_form #cat' ).val(),
+							front_image_id: $( '#add_deal_form #front_image_id' ).val(),
+							deal_image_id: $( '#add_deal_form #deal_image_id' ).val(),
+							price: $( '#add_deal_form #price' ).val(),
+							special_price: $( '#add_deal_form #special_price' ).val(),
+							end_time: $( '#add_deal_form #end_time' ).val()
+						}, 
+						function(data){
+							var ret = $.parseJSON( data );
+							
+							if( ret.type == 'success' ){
+								$( '#post_id' ).val( ret.post_id );
+								
+								actionHide( '#add_deal_form .action-msg', ret.message );
+							}
+						} 
+					);
+				}
 			});
 			
 			// Date time picker
@@ -109,6 +127,25 @@
 				else
 					return true;
 			}, 'Sales price value should be less than price value');
+			
+			jQuery( '.edit-act' ).live( 'click', function(){
+				showHide( 'add_deal' );
+			} );
+			
+			jQuery( '.add_deal_tab' ).click(function(){
+				showDealForm();
+			});
+			
+			// Get a user wallet amount
+			jQuery( '.order_tab' ).click(function(){
+				$.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', { action: 'get_currentuser_wallet' }, function(data){
+					jQuery( '#user_wallet' ).html( data );
+				} );
+			});
+			
+			jQuery( '#return_cancel' ).live( 'click', function(){
+				jQuery.zoombox.close();
+			});
 				
 		});
 		
@@ -145,18 +182,119 @@
 			jQuery( '.'+ id +'_tab' ).parent().addClass( 'active' );
 		}
 		
-
+		function get_update_deal( dealId ){
+			
+			showDealForm( dealId );
+				
+			jQuery.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', 
+				{
+					action: 'get_merchant_deal',
+					deal_id: dealId,
+				}, 
+				function(data){
+					//alert( data );
+					//return;
+					var retObj = jQuery.parseJSON( data );
+					
+					jQuery( '#add_deal_form #title' ).val( retObj.name );
+					tinymce.get( 'dealdescription' ).setContent( retObj.desc );
+					jQuery( '#add_deal_form #cat' ).val( retObj.cat );
+					jQuery( '#add_deal_form #price' ).val( retObj.price );
+					jQuery( '#add_deal_form #special_price' ).val( retObj.special_price );
+					jQuery( '#add_deal_form #end_time' ).val( retObj.end_time );
+					jQuery( '#add_deal_form #front_image_list' ).html( '<img src="'+ retObj.thumb +'" style="width:50px; height: 50px" >' );
+					jQuery( '#add_deal_form #deal_image_list' ).html( '<img src="'+ retObj.img +'" style="width:50px; height: 50px" >' );
+				} 
+			);
+		}
+		
+		function showDealForm( dealId ){
+			if( dealId ){
+				jQuery( '#add_deal_form #post_id' ).val( dealId );	
+				
+				jQuery( '#add_deal_form #deal_heading' ).html( 'Edit a Deal' );
+			}else{
+				jQuery( '#add_deal_form #deal_heading' ).html( 'Add a Deal' );
+				dealFormReset();
+			}
+		}
+		
+		function dealFormReset(){
+			jQuery( '#add_deal_form #title' ).val( '' );
+			tinymce.get( 'dealdescription' ).setContent( '' );
+			jQuery( '#add_deal_form #cat' ).val( '' );
+			jQuery( '#add_deal_form #price' ).val( '' );
+			jQuery( '#add_deal_form #special_price' ).val( '' );
+			jQuery( '#add_deal_form #end_time' ).val( '' );
+			jQuery( '#add_deal_form #front_image_list' ).html( '' );
+			jQuery( '#add_deal_form #deal_image_list' ).html( '' );
+			jQuery( '#add_deal_form #post_id' ).val( '' );
+		}
+		
+		function returnDeal( orderId ){
+			if( !orderId )
+				return false;
+			
+			Messi.ask( 'Are you sure to return this deal?', function( val ){
+				if( val == 'N' ){
+					jQuery( '.messi-box' ).hide();	
+				}else{
+					jQuery.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', { action: 'return_deal', return_deal_id: orderId }, function(data){
+						var retObj = jQuery.parseJSON( data );
+						
+						if( retObj.type == 'error' ){
+							new Messi( retObj.message, { closeButton: false} );
+						}else{
+							new Messi( retObj.message, { closeButton: false } );
+							jQuery( '.flex-orders' ).flexReload();
+							setTimeout( "messiClose()", 2000 );
+						}
+					} );
+				}				
+			} );
+		}
+		
+		function returnApprove( orderId ){
+			if( !orderId )
+				return false;
+			
+			Messi.ask( 'Do you accept this return?', function( val ){
+				if( val == 'N' ){
+					jQuery( '.messi-box' ).hide();	
+				}else{
+					jQuery.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', { action: 'return_approve', return_deal_id: orderId }, function(data){
+						var retObj = jQuery.parseJSON( data );
+						
+						if( retObj.type == 'error' ){
+							new Messi( retObj.message, { closeButton: false } );
+						}else{
+							new Messi( retObj.message, { closeButton: false } );
+							jQuery( '.flex-mer-orders' ).flexReload();
+							setTimeout( "messiClose()", 2000 );
+						}
+					} );
+				}				
+			} );
+		}
+		
+		
+		function getMerchantOrder( productId ){
+		
+			if( !productId )
+				return false;
+			
+			var actionURL = jQuery( '#merchant_order_action' ).val() +'&product_id='+ productId;
+			
+			jQuery(".flex-mer-orders").flexOptions( {url: actionURL} ).flexReload();
+			
+			showHide( 'merorder' );
+		}
+		
 	</script>
 	<div id="static_page">
        <div class ="left_side_menu clsFloatLeft">
 	   		<ul class="tabs">
-				<li class="active"><a href="javascript: showHide( 'profile' )" class="profile_tab">ACCOUNT OWNER INFORMATION</a></li>
-				<li><a href="javascript: showHide( 'address' )" class="address_tab">CHANGE ADDRESS</a></li>
-				<li><a href="javascript: showHide( 'security' )" class="security_tab">ACCOUNT SECURITY SETTINGS</a></li>
-				<li><a href="javascript: showHide( 'add_deal' )" class="add_deal_tab">Add a Deal</a></li>
-				<li><a href="javascript: showHide( 'mydeal' )" class="mydeal_tab">My Deals</a></li>
-				<li><a href="javascript: showHide( 'wallet' )" class="wallet_tab">MY WALLET</a></li>
-				<li><a href="javascript: showHide( 'order' )" class="order_tab">ORDER HISTORY</a></li>
+				<?php echo aesthetic_user_menu(); ?>
 			</ul>
 	   </div>
        <div class="content clsFloatRight">
@@ -329,11 +467,13 @@
 					</form>
 				</div>
 				
+				<?php if( current_user_can( 'author' ) ) : ?>
 				<!-- Add a deal tab -->
 				<div id="add_deal" class="formfield">
 					<form name="add_deal_form" id="add_deal_form" action="" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="action" id="deal_action" value="add_deal" />
-						<?php 
+						<input type="hidden" name="post_id" id="post_id" value=""  />
+						<?php  
 							$title = $_POST['title'];
 							$dealdescription = $_POST['dealdescription'];
 							$cat = $_POST['cat'];
@@ -341,13 +481,7 @@
 							$special_price = $_POST['special_price'];
 							$end_time = $_POST['end_time'];
 						?>
-						<h1>Add a Deal</h1>
-						<?php if( strlen( $deal_error ) ) : ?>
-						<div class="err-msg"><?php echo $deal_error; ?></div>
-						<?php endif; ?>
-						<?php if( strlen( $deal_success ) ) : ?>
-						<div class="err-msg"><?php echo $deal_success; ?></div>
-						<?php endif; ?>
+						<h1 id="deal_heading">Add a Deal</h1>
 						<div class="clsFormField">
 							<div class="label clsFloatLeft">Title <span class="red">*</span>:</div>
 							 <div class="clsInput clsFloatRight">
@@ -361,7 +495,8 @@
 							 <div class="clsInput clsFloatRight field-editor">
 								<?php 
 									$args = array(
-										'textarea_rows' => '9'
+										'textarea_rows' => '9',
+										'media_buttons' => true
 									);
 									wp_editor( $dealdescription, 'dealdescription', $args ); 
 								?>
@@ -385,12 +520,25 @@
 						<div class="clear"></div>
 						
 						<div class="clsFormField">
-							<div class="label clsFloatLeft">Image :</div>
-							 <div id="file_container" class="clsInput clsFloatRight" style="height:200px">
+							<div class="label clsFloatLeft">Deal Front Image :</div>
+							 <div id="front_image_container" class="clsInput clsFloatRight" style="height:65px">
 								<!--<input type="file" name="deal_image" id="deal_image" />-->
-								<div id="filelist"></div>
-								<a id="selectfile" href="javascript:;">Deal Image</a>
-								<a id="filesubmit" href="javascript:;">File submit</a>
+								<span id="front_image_list">&nbsp;</span>
+								<input type="button" id="front_image_select" class="btnSubmit" value="Upload Image" style="top:-9px"><br />
+								<span id="front_image_error" class="error"></span>
+								<input type="hidden" name="from_image_id" id="front_image_id" value="" />
+							</div>
+						</div>
+						<div class="clear"></div>
+						
+						<div class="clsFormField">
+							<div class="label clsFloatLeft">Deal Image :</div>
+							 <div id="deal_image_container" class="clsInput clsFloatRight" style="height:65px">
+								<!--<input type="file" name="deal_image" id="deal_image" />-->
+								<span id="deal_image_list">&nbsp;</span>
+								<input type="button" id="deal_image_select" class="btnSubmit" value="Upload Image" style="top:-9px" /><br />
+								<span id="deal_image_error" class="error"></span>
+								<input type="hidden" name="deal_image_id" id="deal_image_id" value="" />
 							</div>
 						</div>
 						<div class="clear"></div>
@@ -424,29 +572,38 @@
 							<div class="label clsFloatLeft">&nbsp;</div>
 							 <div class="clsInput clsFloatLeft">
 								<input type="submit" id="deal_submit" name="deal_submit" value="Submit" class="btnSubmit"  />
+								<span class="action-msg"></span>
 							</div>
 						</div>
 						<div class="clear"></div>
 						
 					</form>
 				</div>
+				<?php endif; ?>
 				
+				<?php if( current_user_can( 'author' ) ) : ?>
 				<!-- My deal tab -->
 				<div id="mydeal" class="formfield">
 					<h1>My Deals</h1>
-					Coming soon...
+					<?php aesthetic_merchant_my_deals(); ?>
 				</div>
 				
-				<!-- Wallet tab -->
-				<div id="wallet" class="formfield">
-					<h1>My Wallet</h1>
-					Coming soon...
+				<!-- Merchant orders tab -->
+				<div id="merorder" class="formfield">
+					<h1>Orders</h1>
+					<?php echo aesthetic_purchase_log_merchant(); ?>
 				</div>
+				<?php endif; ?>
 				
 				<!-- Orders tab -->
 				<div id="order" class="formfield">
 					<h1>Order History</h1>
-					Coming soon...
+					
+					<div id="wallet-section">
+						<h3>In your wallet: <span id="user_wallet"></span></h3>
+					</div>
+					
+					<?php echo aesthetic_purchase_log_user(); ?>
 				</div>
 				
 			</div>	
@@ -457,40 +614,88 @@
  <!-- plupload script -->
  <script>
  	jQuery(document).ready(function($){
+	
+		// Front image upload
 		var uploader = new plupload.Uploader({
 			runtimes : 'gears,html5,flash,silverlight,browserplus',
-			browse_button : 'selectfile',
-			container: 'file_container',
+			browse_button : 'front_image_select',
+			container: 'front_image_container',
 			max_file_size : '2mb',
+			resize: { width: 240, height: 240, quality: 90 },
 			url : '<?php echo admin_url( 'admin-ajax.php?action=deal_attach_file' ); ?>',
-			flash_swf_url : '../js/plupload.flash.swf',
-			silverlight_xap_url : '../js/plupload.silverlight.xap',
 			filters : [
-				{title : "Image files", extensions : "jpg,gif,png"},
-				{title : "Zip files", extensions : "zip"}
+				{title : "Image files", extensions : "jpg,gif,png,jpeg"}
 			]
 		});
 		
 		uploader.bind('FilesAdded', function(up, files) {
 			for (var i in files) {
-				$('#filelist').html( '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>' );
+				//console.log( files );
+				$('#front_image_list').html( '<span id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></span>' );
 			}
+			
 		});
 		
 		uploader.bind('FileUploaded', function(up, file, info) {
-			console.log('[FileUploaded] File:', file, "Info:", info);
+			//console.log('[FileUploaded] File:', file, "Info:", info);
 			
 			var ret = $.parseJSON( info['response'] );
 			
-			$( '#filelist' ).html( '<img src="'+ ret.attach_url +'" style="width:100px; height:100px" />' );
+			$( '#front_image_list' ).html( '<img src="'+ ret.attach_url +'" style="width:50px; height:50px" />' );
+			$( '#front_image_id' ).val( ret.attach_url );
 		});
 		
-		$('#filesubmit').click(function() {
+		uploader.bind( 'QueueChanged', function( up ){
 			uploader.start();
-			return false;
-		});			
+		});
+		
+		uploader.bind( 'error', function( up, args ){
+			$( '#front_image_error' ).html( args.message );
+		});
+		
 		uploader.init();
+		
+		// Deal image upload
+		var DealUploader = new plupload.Uploader({
+			runtimes : 'gears,html5,flash,silverlight,browserplus',
+			browse_button : 'deal_image_select',
+			container: 'deal_image_container',
+			max_file_size : '2mb',
+			//resize: { width: 1024, height: 414, quality: 90 },
+			url : '<?php echo admin_url( 'admin-ajax.php?action=deal_attach_file' ); ?>',
+			filters : [
+				{title : "Image files", extensions : "jpg,gif,png,jpeg"}
+			]
+		});
+		
+		DealUploader.bind('FilesAdded', function(up, files) {
+			for (var i in files) {
+				//console.log( files );
+				$('#deal_image_list').html( '<span id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></span>' );
+			}
+		});
+		
+		DealUploader.bind('FileUploaded', function(up, file, info) {
+			//console.log('[FileUploaded] File:', file, "Info:", info);
+			
+			var ret = $.parseJSON( info['response'] );
+			
+			$( '#deal_image_list' ).html( '<img src="'+ ret.attach_url +'" style="width:50px; height:50px" />' );
+			$( '#deal_image_id' ).val( ret.attach_id );
+		});
+		
+		DealUploader.bind( 'QueueChanged', function( up ){
+			DealUploader.start();
+		});
+		
+		DealUploader.bind( 'error', function( up, args ){
+			$( '#deal_image_error' ).html( args.message );
+		});
+		
+		DealUploader.init();
 	});
+	
+	
  </script>
  
 <?php get_footer(); ?>		

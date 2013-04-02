@@ -5,6 +5,7 @@
  
 if( !class_exists( 'WP_eCommerce' ) ) 
 	wp_die( 'Please install the wp-e-commerce plugin' );
+
 	
 /**
  *  Get the product categories
@@ -113,7 +114,7 @@ function aesthetic_list_deals(){
 	<ul>
 <?php while( wpsc_have_products() ) : wpsc_the_product(); ?>
 		<li>
-			<div class="mosaic-block bar">
+			<div class="mosaic-block bar" id="bar-<?php echo wpsc_the_product_id(); ?>">
 				<a href="<?php echo wpsc_the_product_permalink(); ?>" class="mosaic-overlay">
 					<div class="details">
 						<h1><?php echo wpsc_the_product_title(); ?></h1>
@@ -123,18 +124,25 @@ function aesthetic_list_deals(){
 				<div class="mosaic-backdrop">
 					<a href="<?php echo wpsc_the_product_permalink(); ?>">
 					<?php if( $thumb = get_post_meta( wpsc_the_product_id(), '_aes_product_thumb', true ) ) : ?>
-						<img src="<?php echo $thumb; ?>" alt="<?php echo wpsc_the_product_title(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" />
+						<img src="<?php echo $thumb; ?>" alt="<?php echo wpsc_the_product_title(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" /> 
 					<?php else : ?>
 						<img src="<?php echo aesthetic_get_default_image_url(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" />
 					<?php endif; ?>
 					</a>
 				</div>
 				<div class="like"><a class="<?php if( aesthetic_is_in_wish( wpsc_the_product_id() ) ) echo 'wishlist-remove'; else echo 'wishlist-add'; ?>" deal="<?php echo wpsc_the_product_id(); ?>" href="#" title="Wishlist"></a></div>
+				<div class="share">
+					<a href="http://facebook.com/sharer.php?s=100&p[url]=<?php echo esc_url( wpsc_the_product_permalink() ); ?>" class="fb" target="_blank"></a>
+					<a href="http://twitter.com/share?url=<?php echo esc_url( wpsc_the_product_permalink() ); ?>" class="tw" target="_blank"></a>
+					<a href="http://pinterest.com/pin/create/button/?url=<?php echo esc_url( wpsc_the_product_permalink() ); ?>&media=<?php echo esc_url( wpsc_the_product_thumbnail( 1024, 414 ) ); ?>" class="pin" target="_blank"></a>
+				</div>
 			</div>
 		
 			<div class="clearfix"></div>
-			<div class="nav"><a href="<?php echo wpsc_the_product_permalink(); ?>" title="some title" class="btnNav">Buy now</a> </div>
-			<span class="new"></span>
+			<div class="nav"><a href="<?php echo wpsc_the_product_permalink(); ?>" title="some title" class="btnNav" attr="bar-<?php echo wpsc_the_product_id(); ?>">Buy now</a> </div>
+			<?php if( get_no_of_bought( wpsc_the_product_id() ) == 0 ) : ?>
+				<span class="new"></span>
+			<?php endif; ?>
 		</li>
 	</ul>
 <?php
@@ -143,13 +151,68 @@ function aesthetic_list_deals(){
 		<div class="clear"></div>	
 <?php
 	else :
-		echo '<p>There are no deals</p>';
+		echo '<p>Please watch this page for new deals</p>';
 	endif;
 	
 	exit;
 }
 add_action( 'wp_ajax_nopriv_get_deals', 'aesthetic_list_deals' );
 add_action( 'wp_ajax_get_deals', 'aesthetic_list_deals' );
+
+/**
+ * Get the deals to display in the calendar - Calling via ajax
+ */
+function aesthetic_calendar_deals(){
+	$ret = array();
+	
+	$args = array(
+		'post_status' => 'publish',
+		'post_type'   => 'wpsc-product',
+		'posts_per_page' => -1,
+		'meta_query' => array(
+			array(
+				'key' => '_aes_product_endtime',
+				'value' => date( 'Y-m-d H:i', current_time( 'timestamp' ) ),
+				'type' => 'DATETIME',
+				'compare' => '>'
+			)
+		)
+	);
+	
+//	echo '<pre>';
+//	print_r( $args );
+//	echo '</pre>';
+//	exit;
+	
+	aesthetic_get_deals( $args );
+	
+	if( wpsc_have_products() ) :
+		while( wpsc_have_products() ) : wpsc_the_product();
+			$endtime = get_post_meta( wpsc_the_product_id(), '_aes_product_endtime', true );
+			$endtime_format = date( 'F d, Y H:i', strtotime( $endtime ) );
+			$year = date( 'Y', strtotime( $endtime ) );
+			$month = date( 'm', strtotime( $endtime ) );
+			$day = date( 'd', strtotime( $endtime ) );
+		
+			$ret[] = array(
+				'id' => wpsc_the_product_id(),
+				'title' => ucfirst( wpsc_the_product_title() ),
+				'start' => "$year-$month-$day",
+				'url' => wpsc_the_product_permalink()
+			);
+		endwhile;
+	endif;
+	
+//	echo '<pre>';
+//	print_r( $ret );
+//	echo '</pre>';
+//	exit;
+	
+	echo json_encode( $ret );
+	exit;
+}
+add_action( 'wp_ajax_get_calendar_deals', 'aesthetic_calendar_deals' );
+add_action( 'wp_ajax_nopriv_get_calendar_deals', 'aesthetic_calendar_deals' );
 
 function aesthetic_echo_query( $input ){
 	if( $_POST['action'] == 'get_deals' )
@@ -472,27 +535,33 @@ function aesthetic_wpsc_admin_column_data( $column ){
 	$ret = '';
 	
 	if( $column == 'endtime' ){
-		$current_time = current_time( 'timestamp' );
-		$endtime_str = get_post_meta( $post->ID, '_aes_product_endtime', true );
-		$endtime = strtotime( $endtime_str );
-		
-		$ret = date( get_option( 'date_format' ) .' '. get_option( 'time_format' ) , $endtime );
-		
-		if( $endtime > $current_time )
-			$ret .= '<br />'. human_time_diff( $endtime, $current_time ) .' Remaining';
-		else
-			$ret .= '<br /> Expired';
+		$ret = aesthetic_deal_end_time( $post->ID );
 	}
 	
 	echo $ret;
 }
 add_action( 'manage_pages_custom_column', 'aesthetic_wpsc_admin_column_data' );
 
-function aesthetic_add_editor(){
-	exit( 'calling' );
-	wp_editor( 'some', 'dealdescription' );	
+/**
+ * Deal end time
+ */
+function aesthetic_deal_end_time( $product_id = '' ){
+	if( empty( $product_id ) )
+		return;
+		
+	$current_time = current_time( 'timestamp' );
+	$endtime_str = get_post_meta( $product_id, '_aes_product_endtime', true );
+	$endtime = strtotime( $endtime_str );
+	
+	$ret = date( get_option( 'date_format' ) .' '. get_option( 'time_format' ) , $endtime );
+	
+	if( $endtime > $current_time )
+		$ret .= '<br />'. human_time_diff( $endtime, $current_time ) .' Remaining';
+	else
+		$ret .= '<br /> Expired';
+		
+	return $ret;
 }
-add_action( 'edit_page_form', 'aesthetic_add_editor' );
 
 /**
  * Add a merchant deal
@@ -500,39 +569,76 @@ add_action( 'edit_page_form', 'aesthetic_add_editor' );
 function aesthetic_add_merchant_deal(){
 	global $deal_error;
 
-	if( $_POST['deal_submit'] ){
+	if( $_POST['action'] == 'add_merchant_deal' ){
 		
 		$deal_data = array(
-			'post_title' => sanitize_title( $_POST['title'] ),
-			'post_content' => esc_textarea( $_POST['dealdescription'] ),
+			'post_title' => sanitize_text_field( $_POST['title'] ),
+			'post_content' => $_POST['desc'],
 			'post_status' => 'publish',
 			'post_author' => get_current_user_id(),
 			'post_type' => 'wpsc-product'
 		);
 		
+		if( $_POST['post_id'] )
+			$deal_data['ID'] = $_POST['post_id'];
+		
 		foreach( $deal_data as $key => $val ){
 			if( empty( $val ) ){
-				$deal_error = 'Required fields are mandatory';
-				break;
+				aesthetic_action_msg( 'Required fields are mandatory' );
 			}
 		}
 		
-		if( empty( $deal_error ) )
-			$post_id = wp_insert_post( $deal_data );
+		$post_id = wp_insert_post( $deal_data );
 		
-		// Handle image upload
-		include_once ABSPATH . 'wp-admin/includes/media.php';
-		include_once ABSPATH . 'wp-admin/includes/file.php';
-		include_once ABSPATH . 'wp-admin/includes/image.php';
-		
-		if( $post_id && empty( $deal_error ) ){
+		// Category update
+		if( $post_id && $_POST['cat'] ){
+			$cat_obj = get_term_by( 'id', $_POST['cat'], 'wpsc_product_category' );
 			
+			if( $cat_obj->slug )
+				wp_set_object_terms( $post_id, $cat_obj->slug, 'wpsc_product_category' );
 		}
 		
-		$deal_success = 'You deal added successfully';
+		// Add an attachment
+		if( $post_id && $_POST['deal_image_id'] ){
+			$update_attach = array(
+				'ID' => $_POST['deal_image_id'],
+				'post_parent' => $post_id
+			);
+			
+			wp_update_post( $update_attach );
+			
+			//include_once ABSPATH . 'wp-admin/includes/image.php';
+			set_post_thumbnail( $post_id, $_POST['deal_image_id'] );
+			//$attach_data = wp_generate_attachment_metadata( $attachment_id, get_attached_file( $_POST['deal_image_id'] ) );
+			//wp_update_attachment_metadata( $attachment_id, $attach_data );
+		}
+			
+		// Meta update
+		if( $_POST['price'] )
+			update_post_meta( $post_id, '_wpsc_price', sanitize_text_field( $_POST['price'] ) );
+			
+		if( $_POST['special_price'] )
+			update_post_meta( $post_id, '_wpsc_special_price', sanitize_text_field( $_POST['special_price'] ) );
+					
+		if( $_POST['front_image_id'] )
+			update_post_meta( $post_id, '_aes_product_thumb', esc_url( $_POST['front_image_id'] ) );
+			
+		if( $_POST['end_time'] ){
+			$endtime = ( !empty( $_POST['end_time'] ) ) ? sanitize_text_field( $_POST['end_time'] ) : date( 'Y-m-d H:i:s', strtotime( '+2 day', current_time( 'timestamp' ) ) );
+			update_post_meta( $post_id, '_aes_product_endtime', $endtime );
+		}
+			
+		$ret = array(
+			'type' => 'success',
+			'message' => ( !$_POST['post_id'] ) ? 'Your deal has been added successfully' : 'Your deal has been updated successfully',
+			'post_id' => $post_id
+		);
+		
+		echo json_encode( $ret );
+		exit;
 	}
 }
-add_action( 'init', 'aesthetic_add_merchant_deal' );
+add_action( 'wp_ajax_add_merchant_deal', 'aesthetic_add_merchant_deal' );
 
 /**
  * Add the deal images
@@ -541,29 +647,38 @@ function aesthetic_attach_image(){
 	$ret = array();
 
 	if( $_FILES['file' ] ){
+		// Handle image upload
+		include_once ABSPATH . 'wp-admin/includes/media.php';
+		include_once ABSPATH . 'wp-admin/includes/file.php';
+		include_once ABSPATH . 'wp-admin/includes/image.php';
+	
 		$upload_file = $_FILES['file'];
 		$upload_overrides = array( 'test_form' => false );
 		
-		$move_file = wp_handle_upload( $upload_file, $upload_overrides );
+		$move_file = wp_handle_upload( $upload_file, $upload_overrides, current_time( 'mysql' ) );
+
+		$wp_upload_dir = wp_upload_dir();
 		
 		if( $move_file['url'] ){
 			$attachment_data = array(
-				'guid' => $move_file['url'],
+				'guid' => $wp_upload_dir['url'] . '/' . basename( $move_file['url'] ),
 				'post_mime_type' => $move_file['type'],
 				'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $move_file['url'] ) ),
 				'post_content' => '',
 				'post_status' => 'inherit'
 			);
 			
-			$attachment_id = wp_insert_attachment( $attachment_data, $move_file['url'] );
+			$attachment_id = wp_insert_attachment( $attachment_data, $move_file['file'] );
 		
-			$attach_data = wp_generate_attachment_metadata( $attachment_id, $move_file['url'] );
+			$attach_data = wp_generate_attachment_metadata( $attachment_id, $move_file['file'] );
+			
 			wp_update_attachment_metadata( $attachment_id, $attach_data );
 			
 			$ret = array(
 				'type' => 'success',
 				'attach_id' => $attachment_id,
 				'attach_url' => $move_file['url'],
+				'attach_path' => $move_file['file'],
 				'msg' => ''
 			);
 			
@@ -579,4 +694,265 @@ function aesthetic_attach_image(){
 	exit;
 }
 add_action( 'wp_ajax_deal_attach_file', 'aesthetic_attach_image' );
+
+/**
+ * Load the flexgrid
+ */
+function aesthetic_flexgrid_include(){
+	wp_enqueue_script( 'flexgrid-script', get_template_directory_uri() .'/flexgrid/js/flexigrid.js', array('jquery'), '1.1' );
+	wp_enqueue_style( 'flexgrid-style', get_template_directory_uri() .'/flexgrid/css/flexigrid.css', '', '1.1' );
+}
+add_action( 'wp_enqueue_scripts', 'aesthetic_flexgrid_include' );
+add_action( 'admin_enqueue_scripts', 'aesthetic_flexgrid_include' );
+
+/**
+ * Display the merchant my deals section
+ */
+function aesthetic_merchant_my_deals(){
+?>
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			jQuery(".flexme3").flexigrid({
+				url : '<?php echo admin_url( 'admin-ajax.php?action=my_deals' ); ?>',
+				dataType : 'json',
+				colModel : [ {
+					display : 'Image',
+					name : 'thumb',
+					width : 100,
+					sortable : false,
+					align : 'center'
+				}, {
+					display : 'Name',
+					name : 'name',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				},{
+					display : 'Price',
+					name : 'price',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : 'Sale Price',
+					name : 'special_price',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : 'Category',
+					name : 'cat',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : 'Created',
+					name : 'created',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : 'End Time',
+					name : 'end_time',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : 'Orders',
+					name : 'order',
+					width : 100,
+					sortable : true,
+					align : 'left'
+				}, {
+					display : 'Action',
+					name : 'action',
+					width : 100,
+					sortable : false,
+					align : 'center'
+				}],
+				searchitems : [ {
+					display : 'Name',
+					name : 'name',
+					isdefault : true
+				}, {
+					display : 'Created',
+					name : 'created'
+				}, {
+					display : 'Category',
+					name : 'cat',
+				}],
+				sortname : "name",
+				sortorder : "asc",
+				usepager : true,
+				title : 'My Deals',
+				useRp : true,
+				rp : 15,
+				showTableToggleBtn : true,
+				width : 710,
+				height : 600
+			});
+		});
+	</script>
+
+	<div>
+		<table class="flexme3" style="display: none"></table>
+	</div>
+<?php
+}
+
+/** 
+ * Get the merchant deals
+ */
+function aesthetic_merchant_deals(){
+	$args = array(
+		'post_status' => 'publish',
+		'post_type'   => 'wpsc-product',
+		'posts_per_page' => -1,
+		'author' => get_current_user_id()
+	);
+	
+	aesthetic_get_deals( $args );
+	
+	$rows = array();
+	
+	while( wpsc_have_products() ) : wpsc_the_product();
+		
+		$row = array(
+			'id' => wpsc_the_product_id(),
+			'thumb' => get_post_meta( wpsc_the_product_id(), '_aes_product_thumb', true ),
+			'name' => ucfirst( wpsc_the_product_title() ),
+			'link' => wpsc_the_product_permalink(),
+			'price' => wpsc_product_normal_price(),
+			'special_price' => wpsc_the_product_price(),
+			'cat' => ucfirst( aesthetic_get_cats_name( wpsc_the_product_id() ) ),
+			'created' => get_the_date() .' '. get_the_time(),
+			'end_time' => get_post_meta( wpsc_the_product_id(), '_aes_product_endtime', true ),
+			'order' => 0,
+			'action' => 'edit'
+		);
+		
+		$rows[] = $row;
+	endwhile;
+	
+	$page = isset($_POST['page']) ? $_POST['page'] : 1;
+	$rp = isset($_POST['rp']) ? $_POST['rp'] : 10;
+	$sortname = isset($_POST['sortname']) ? $_POST['sortname'] : 'name';
+	$sortorder = isset($_POST['sortorder']) ? $_POST['sortorder'] : 'desc';
+	$query = isset($_POST['query']) ? $_POST['query'] : false;
+	$qtype = isset($_POST['qtype']) ? $_POST['qtype'] : false;
+	
+	### Search and paging 
+	if($qtype && $query){
+		$query = strtolower(trim($query));
+		foreach($rows AS $key => $row){
+			if(strpos(strtolower($row[$qtype]),$query) === false){
+				unset($rows[$key]);
+			}
+		}
+	}
+	//Make PHP handle the sorting
+	$sortArray = array();
+	foreach($rows AS $key => $row){
+		$sortArray[$key] = $row[$sortname];
+	}
+	$sortMethod = SORT_ASC;
+	if($sortorder == 'desc'){
+		$sortMethod = SORT_DESC;
+	}
+	array_multisort($sortArray, $sortMethod, $rows);
+	$total = count($rows);
+	$rows = array_slice($rows,($page-1)*$rp,$rp);	
+	
+	header("Content-type: application/json");
+	$jsonData = array('page'=>$page,'total'=>$total,'rows'=>array());
+	
+	foreach($rows AS $row){
+		
+		$row['thumb'] = '<a href="'. $row['link'] .'" target="_blank"><img src="'. $row['thumb'] .'" style="width:50px; height:50px" alt="'. $row['title'] .'"></a>';
+		$row['name'] = '<a href="'. $row['link'] .'" target="_blank">'. $row['name'] .'</a>';
+		$row['end_time'] = aesthetic_deal_end_time( $row['id'] );
+		$row['order'] = '<a href="javascript: getMerchantOrder( \''. $row['id'] .'\' )" class="button-grid">'. sizeof( aesthetic_get_logids_by_product( $row['id'] ) ) .'</a>';
+		$row['action'] = '<a href="javascript:get_update_deal(\''. $row['id'] .'\');" class="edit-act button-grid">'. edit .'</a>';
+	 	
+		$entry = array( 'id'=>$row['sessionid'], 'cell' => $row );
+		$jsonData['rows'][] = $entry;
+	}
+	echo json_encode($jsonData);
+	exit;
+}
+add_action( 'wp_ajax_my_deals', 'aesthetic_merchant_deals' );
+
+/**
+ * Get the product categories name - must be in the loop
+ */
+function aesthetic_get_cats_name( $product_id ){
+
+	if( !$product_id )
+		return;
+	
+	$categories = get_the_terms( $product_id, 'wpsc_product_category' );
+	
+	$seperator = ', ';
+	$output = '';
+	
+	foreach( (array) $categories as $category ){
+		$output .= $category->name	;
+	}
+	
+	return trim( $output, $seperator );
+}
+
+/**
+ * Get a deal category ID
+ */
+function aesthetic_get_cat_id( $product_id ){
+	if( empty( $product_id ) )
+		return false;
+		
+	$categories = get_the_terms( $product_id, 'wpsc_product_category' );
+	
+	$category = end( $categories );
+	
+	return $category->term_id;
+}
+
+/**
+ * Get a merchant deal
+ */
+function aesthetic_get_merchant_deal(){
+	$ret = array();
+
+	if( $_POST['action'] == 'get_merchant_deal' && $_POST['deal_id'] ){
+		$deal_id = $_POST['deal_id'];
+		
+		$args = array(
+			'post_status' => 'publish',
+			'post_type'   => 'wpsc-product',
+			'author' => get_current_user_id(),
+			'p' => $deal_id
+		);
+		
+		aesthetic_get_deals( $args );
+		
+		while( wpsc_have_products() ) : wpsc_the_product();
+			$ret = array(
+				'id' => wpsc_the_product_id(),
+				'name' => wpsc_the_product_title(),
+				'desc' => wpsc_the_product_description(),
+				'thumb' => get_post_meta( wpsc_the_product_id(), '_aes_product_thumb', true ),
+				'img' => wpsc_the_product_thumbnail(),
+				'link' => wpsc_the_product_permalink(),
+				'price' => wpsc_calculate_price( wpsc_the_product_id(), false, false ),
+				'special_price' => wpsc_calculate_price( wpsc_the_product_id() ),
+				'cat' => aesthetic_get_cat_id( wpsc_the_product_id() ),
+				'end_time' => get_post_meta( wpsc_the_product_id(), '_aes_product_endtime', true ),
+			);
+		endwhile;
+	}
+	
+	echo json_encode( $ret );
+	exit;
+}
+add_action( 'wp_ajax_get_merchant_deal', 'aesthetic_get_merchant_deal' );
+ 
 

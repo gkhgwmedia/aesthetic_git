@@ -38,7 +38,7 @@ function aesthetic_fb_login( $redirect_to = '',  $mode = 'sign_up' ){
 			</div>
 	';
 	
-	$output .= '<a id="fconnect" href="'. $url .'"><img src="'. get_template_directory_uri() .'/images/fb_connect.png" alt="Facebook connect" /></a>';
+	$output .= '<a id="fconnect" class="fconnect" href="'. $url .'"><img src="'. get_template_directory_uri() .'/images/fb_connect.png" alt="Facebook connect" /></a>';
 	
 	echo $output;
 }

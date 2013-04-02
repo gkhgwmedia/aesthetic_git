@@ -123,10 +123,10 @@
 						
 						var tipFrom = ( jQuery( "#slider-range" ).slider( "values", 0 ) / priceEnd ) * jQuery( "#slider-range" ).width();
 						var tipTo = ( jQuery( "#slider-range" ).slider( "values", 1 ) / priceEnd ) * jQuery( "#slider-range" ).width();
-						tipFrom = tipFrom + 10;
-						tipTo = tipTo + 10;
-						jQuery( '.tip-from' ).css('left', tipFrom ).text(ui.values[0]);
-						jQuery( '.tip-to' ).css('left', tipTo ).text(ui.values[1]);
+//						tipFrom = tipFrom + 10;
+//						tipTo = tipTo + 10;
+						jQuery( '.tip-from' ).text(ui.values[0]);
+						jQuery( '.tip-to' ).text(ui.values[1]);
 					},
 					change: function( event, ui ){
 						loadDeals();
@@ -205,16 +205,47 @@
 		
 		extract( $args );
 		
+		$args = array(
+			'post_status' => 'publish',
+			'post_type'   => 'wpsc-product',
+			'posts_per_page' => 1,
+			'post__in' => get_option( 'sticky_products' ),
+			'meta_query' => array(
+				array(
+					'key' => '_aes_product_endtime',
+					'value' => date( 'Y-m-d H:i', current_time( 'timestamp' ) ),
+					'type' => 'DATETIME',
+					'compare' => '>'
+				)
+			),
+			'orderby' => 'ID',
+			'order' => 'DESC'
+		);
+		
+		aesthetic_get_deals( $args );
+		
+		if( !wpsc_have_products() )
+			return;
+		
 		echo $before_widget;
 		
 		echo $before_title;
 			echo ucfirst( $instance['title'] );
 		echo $after_title;
 		
+		while( wpsc_have_products() ) : wpsc_the_product();
+			
 ?>
-		<p>&nbsp;</p>
-		<img src="<?php echo get_template_directory_uri(); ?>/images/feautured_deal.png" />
+			<p>&nbsp;</p>
+			<a href="<?php echo wpsc_the_product_permalink(); ?>">
+			<?php if( $thumb = get_post_meta( wpsc_the_product_id(), '_aes_product_thumb', true ) ) : ?>
+				<img src="<?php echo $thumb; ?>" alt="<?php echo wpsc_the_product_title(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" title="<?php echo wpsc_the_product_title(); ?>" /> 
+			<?php else : ?>
+				<img src="<?php echo aesthetic_get_default_image_url(); ?>" alt="<?php echo wpsc_the_product_title(); ?>" />
+			<?php endif; ?>
+			</a>
 <?php
+		endwhile;
 		echo $after_widget;
 	}
 	

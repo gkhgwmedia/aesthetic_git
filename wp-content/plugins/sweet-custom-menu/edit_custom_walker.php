@@ -83,7 +83,7 @@ class Walker_Nav_Menu_Edit_Custom extends Walker_Nav_Menu  {
 	    }
 	
 	    $title = empty( $item->label ) ? $title : $item->label;
-	
+		
 	    ?>
 	    <li id="menu-item-<?php echo $item_id; ?>" class="<?php echo implode(' ', $classes ); ?>">
 	        <dl class="menu-item-bar">
@@ -178,6 +178,16 @@ class Walker_Nav_Menu_Edit_Custom extends Walker_Nav_Menu  {
 	                <label for="edit-menu-item-subtitle-<?php echo $item_id; ?>">
 	                    <?php _e( 'Query' ); ?><br />
 	                    <input type="text" id="edit-menu-item-subtitle-<?php echo $item_id; ?>" class="widefat code edit-menu-item-custom" name="menu-item-subtitle[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $item->subtitle ); ?>" />
+	                </label>
+	            </p>
+				
+				<p class="field-custom description description-wide">
+	                <label for="edit-menu-item-subtitle-<?php echo $item_id; ?>">
+						<?php global $wp_roles ?>
+	                    <?php _e( 'Accessed by' ); ?><br />
+						<?php foreach( $wp_roles->role_names as $role_id => $role_name ) : ?>
+							<input type="checkbox" name="menu-item-access[<?php echo $item_id; ?>][]" id="edit-menu-item-access-<?php echo $role_name .'-'. $item_id; ?>" class="code edit-menu-item-custom" value="<?php echo $role_id; ?>" <?php if( in_array( $role_id, (array)$item->access ) ) echo 'checked="checked"'; ?> /> <?php echo $role_name; ?><br />
+						<?php endforeach; ?>
 	                </label>
 	            </p>
 	            <?php

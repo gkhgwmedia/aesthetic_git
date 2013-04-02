@@ -27,6 +27,7 @@ function aesthetic_setup(){
 	register_nav_menu( 'deal_menu', __( 'Deal Menu', 'aesthetic' ) );
 	register_nav_menu( 'primary_user', __( 'Primary User Menu', 'aesthetic' ) );
 	register_nav_menu( 'new_to', __( 'New to Aethetic Today', 'aesthetic' ) );
+	register_nav_menu( 'user_menu', __( 'User Menu', 'aesthetic' ) );
 	/*
 	 * This theme supports custom background color and image, and here
 	 * we also set up the default background color.
@@ -55,6 +56,18 @@ include_once( get_template_directory() .'/inc/custom-header.php' );
 // Include wpec functions
 include_once( get_template_directory() .'/inc/wpec-functions.php' );
 
+// Include wpsc cart and checkout functions
+include_once( get_template_directory() .'/inc/wpsc-cart-checkout.php' );
+
+// Include wpsc purchase log functions
+include_once( get_template_directory() .'/inc/wpsc-purchase-log.php' );
+
+// Include wpsc purchase log functions
+include_once( get_template_directory() .'/inc/wpsc-notification.php' );
+
+// Include subscribe functions
+include_once( get_template_directory() .'/inc/wpsc-subscribe.php' );
+
 // Include widgets
 include_once( get_template_directory() .'/inc/widgets.php' );
 
@@ -75,10 +88,8 @@ function aesthetic_script_style(){
 	//wp_enqueue_script( 'jquery-ui-slider' );
 
 	wp_enqueue_script( 'aw-showcase', get_template_directory_uri() . '/js/jquery.aw-showcase.js', array( 'jquery' ) );
-	wp_enqueue_script( 'zoombox', get_template_directory_uri() . '/js/zoombox.js', array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-validate', get_template_directory_uri() . '/js/jquery.validate.js', array( 'jquery' ) );
 	wp_enqueue_script( 'jquery-inlinelabel', get_template_directory_uri() . '/js/jquery.infieldlabel.js', array( 'jquery' ) );
-	wp_enqueue_script( 'jquery-mosaic', get_template_directory_uri() . '/js/mosaic.1.0.1.js', array( 'jquery' ) );
 	
 	// jQuery time coundown
 	wp_enqueue_script( 'jquery-countdown', get_template_directory_uri() . '/js/jquery-countdown/jquery.countdown.js', array( 'jquery' ) );
@@ -86,13 +97,32 @@ function aesthetic_script_style(){
 	// jQuery UI CSS
 	wp_enqueue_style( 'jquery-ui-css', 'http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css' );
 	
-	wp_enqueue_style( 'aesthetic-style', get_stylesheet_uri() );
-	wp_enqueue_style( 'zoombox-style',  get_template_directory_uri() . '/css/zoombox.css' );
+	// mosaic
+	wp_enqueue_script( 'jquery-mosaic', get_template_directory_uri() . '/js/mosaic.1.0.1.js', array( 'jquery' ) );
 	wp_enqueue_style( 'mosaic-style',  get_template_directory_uri() . '/css/mosaic.css' );
+	
+	// Zoombox
+	wp_enqueue_script( 'jquery-zoombox', get_template_directory_uri() . '/zoombox/zoombox.js', array( 'jquery' ) );
+	wp_enqueue_style( 'zoombox-style',  get_template_directory_uri() . '/zoombox/zoombox.css' );
 	
 	// Tooltip
 	wp_enqueue_script( 'jquery-tooltipser', get_template_directory_uri() . '/js/jquery-tooltipser/js/jquery.tooltipster.js', array( 'jquery' )  );
 	wp_enqueue_style( 'jquery-tooltipser-style',  get_template_directory_uri() . '/js/jquery-tooltipser/css/tooltipster.css' );
+	
+	// messi library
+	wp_enqueue_script( 'jquery-messi', get_template_directory_uri() . '/messi/messi.js', array( 'jquery' ) );
+	wp_enqueue_style( 'messi-style',  get_template_directory_uri() . '/messi/messi.css' );
+	
+	// Charecter counter
+	wp_enqueue_script( 'jquery-noblecount', get_template_directory_uri() . '/js/jquery.NobleCount.js', array( 'jquery' )  );
+	
+	// jQuery cookie
+	wp_enqueue_script( 'jquery-cookie', get_template_directory_uri() . '/js/jquery.cookie.js', array( 'jquery' )  );
+	
+	// Common js file
+	wp_enqueue_script( 'common-js', get_template_directory_uri() . '/js/common.js' );
+	
+	wp_enqueue_style( 'aesthetic-style', get_stylesheet_uri() );
 }
 add_action( 'wp_enqueue_scripts', 'aesthetic_script_style' );
 
@@ -215,6 +245,67 @@ function aesthetic_deal_menu(){
 		}
 	}
 }
+
+/**
+ * User menu
+ */
+function aesthetic_user_menu(){
+	$menu_name = 'user_menu';
+	
+	if ( ( $locations = get_nav_menu_locations() ) && isset( $locations[ $menu_name ] ) ) {
+		$menu = wp_get_nav_menu_object( $locations[ $menu_name ] );
+		$menu_items = wp_get_nav_menu_items($menu->term_id);
+		
+		$menu_count = count( $menu_items );
+		foreach( (array) $menu_items as $key => $menu_item ){
+?>
+			<li class="active"><a href="javascript: showHide( '<?php echo $menu_item->subtitle ?>' )" class="<?php echo $menu_item->subtitle ?>_tab"><?php echo $menu_item->title; ?></a></li>
+<?php
+		}
+	}
+}
+
+/**
+ * Get the menus according to access rights
+ */
+function aesthetic_menu_filter_temp( $item ){
+	global $current_user;
+
+//	echo '<pre>';
+//	print_r( $current_user );
+//	echo '</pre>';
+//	exit;
+//	
+	if( is_array( $item->access ) ){
+		if( in_array( $current_user->roles[0], $item->access ) )
+			return $item;
+		else
+			return '';
+	}
+	return $item;
+}
+//add_filter( 'wp_setup_nav_menu_item', 'aesthetic_menu_filter' );
+
+function aesthetic_menu_filter( $items ){
+	global $current_user;
+	
+	if( is_admin() )
+		return $items;
+	
+	$new_items = array();
+	
+	foreach( $items as $item ){
+		if( is_array( $item->access ) ){
+			if( in_array( $current_user->roles[0], $item->access ) )
+				$new_items[] = $item;
+		}else{
+			$new_items[] = $item;
+		}
+	}
+	
+	return $new_items;
+}
+add_filter( 'wp_get_nav_menu_items', 'aesthetic_menu_filter', 3 );
 
 /**
  * Aesthetic widgets
@@ -639,4 +730,47 @@ function aesthetic_display_user_meta( $user ){
 <?php
 }
 add_action( 'edit_user_profile', 'aesthetic_display_user_meta' );
+
+/**
+ * User access prohibit
+ */
+function aesthetic_user_access(){
+	global $post;
+	$user_access_pages = array( '158' );
+
+	if( in_array( $post->ID, $user_access_pages ) && !is_user_logged_in() ){
+		wp_redirect( get_page_link( 145 ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'aesthetic_user_access', 100 );
+
+/**
+ * Get a user mail 
+ */
+function aesthetic_get_user_mail( $user_id = '' ){
+	if( empty( $user_id ) )
+		return '';
+		
+	$data = get_userdata( $user_id );
+	
+	if( $data->user_email )
+		return $data->user_email;
+}
+
+/**
+ * User access prohibit
+ */
+function aesthetic_remove_dash( $wp_admin_bar ){
+	$wp_admin_bar->remove_node( 'wp-logo' );
+	
+	if( !current_user_can( 'manage_options' ) ){
+		$wp_admin_bar->remove_node( 'site-name' );
+		$wp_admin_bar->remove_node( 'comments' );
+		$wp_admin_bar->remove_node( 'new-content' );
+		$wp_admin_bar->remove_node( 'search' );
+	}
+}
+add_action( 'admin_bar_menu', 'aesthetic_remove_dash', 999 );
+
 

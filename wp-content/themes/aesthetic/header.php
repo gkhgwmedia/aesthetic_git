@@ -73,13 +73,6 @@
 		</div>
 		
 		<div id="content-wrapper">
-<script type="text/javascript">
-	jQuery(document).ready(function($){
-		$('.zoombox').zoombox();
-		//$('.zoombox').click();
-		
-	});
-</script>
 		
 	
   

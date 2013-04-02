@@ -170,23 +170,14 @@
 					<div class="clear"></div>
 					
 					<div class="clsFormField">
-					<br />
 						<div class="label clsFloatLeft">&nbsp;</div>
 						 <div class="clsInput clsFloatLeft">
 						 	<?php wp_nonce_field( 'aes_register_action', 'aes_register' ); ?>
-							<input type="submit" id="reg_submit" name="reg_submit" value="Submit" class="btnSubmit"  />
+							<input type="submit" id="reg_submit" name="reg_submit" value="Submit" class="btnSubmit"  /><br />
+							<div class="login-link"><a href="<?php echo get_page_link( 145 ); ?>">Login</a> | <a href="<?php echo wp_lostpassword_url(); ?>">Forgot Password?</a></div>
 						</div>
 					</div>
-					<div class="clear"></div>
-					<div class="clsFormField">
-					<br />
-						<div class="label clsFloatLeft">&nbsp;</div>
-						 <div class="clsInput clsFloatLeft">
-							<a href="<?php echo get_page_link( 145 ); ?>">login</a> | <a href="<?php echo wp_lostpassword_url(); ?>">forgot password?</a>
-						</div>
-					</div>
-					<div class="clear"></div>
-					<div class="clear"></div>
+					<div class="clear" style="height:10px"></div>
 				</form>
 			</div>	
 		</div>

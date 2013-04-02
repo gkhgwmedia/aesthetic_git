@@ -59,6 +59,7 @@ class rc_sweet_custom_menu {
 	function rc_scm_add_custom_nav_fields( $menu_item ) {
 	
 	    $menu_item->subtitle = get_post_meta( $menu_item->ID, '_menu_item_subtitle', true );
+		$menu_item->access = get_post_meta( $menu_item->ID, '_menu_item_access', true );
 	    return $menu_item;
 	    
 	}
@@ -77,6 +78,11 @@ class rc_sweet_custom_menu {
 	        $subtitle_value = $_REQUEST['menu-item-subtitle'][$menu_item_db_id];
 	        update_post_meta( $menu_item_db_id, '_menu_item_subtitle', $subtitle_value );
 	    }
+		
+		if( is_array( $_REQUEST['menu-item-access'] ) ){
+			$access_value = $_REQUEST['menu-item-access'][$menu_item_db_id];
+			update_post_meta( $menu_item_db_id, '_menu_item_access', $access_value );
+		}
 	    
 	}
 	

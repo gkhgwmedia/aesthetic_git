@@ -14,8 +14,10 @@
 	function loadDeals(){
 	
 		var container = jQuery( '.loader' );
-		container.addClass( 'loading' );
-	
+		//container.addClass( 'loading' );
+		//new Messi( '<img src="<?php echo get_template_directory_uri(); ?>/images/ajax-loader.gif" />', {closeButton: false, width: 77} );
+		jQuery( '.list-loader' ).show();
+		
 		jQuery.ajax({
 			type: "POST",
 			url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
@@ -35,6 +37,29 @@
 				animation	:	'slide'
 			});
 			
+			jQuery( '.bar' ).mouseenter(function(){
+				var barId = jQuery( this ).attr( 'id' );
+				jQuery( '#'+ barId +' .like' ).css( 'opacity', '1' );
+				jQuery( '#'+ barId +' .share' ).css( 'opacity', '1' );
+			}).mouseleave(function(){
+				var barId = jQuery( this ).attr( 'id' );
+				jQuery( '#'+ barId +' .like' ).css( 'opacity', '0' );
+				jQuery( '#'+ barId +' .share' ).css( 'opacity', '0' );
+			});
+			
+			jQuery( '.btnNav' ).mouseenter(function(){
+				var barId = jQuery( this ).attr( 'attr' );
+				jQuery( '#'+ barId ).trigger( 'mouseover' );
+				
+				jQuery( '#'+ barId +' .like' ).css( 'opacity', '1' );
+				jQuery( '#'+ barId +' .share' ).css( 'opacity', '1' );
+			} ).mouseleave( function(){
+				var barId = jQuery( this ).attr( 'attr' );
+				jQuery( '#'+ barId ).trigger( 'mouseout' );
+				
+				jQuery( '#'+ barId +' .like' ).css( 'opacity', '0' );
+				jQuery( '#'+ barId +' .share' ).css( 'opacity', '0' );
+			} );
 			
 			// Add tooltip for 'wishlist add'
 			jQuery( '.wishlist-add' ).tooltipster({
@@ -64,7 +89,9 @@
 				event.preventDefault();
 			});
 			
-			container.removeClass( 'loading' );
+			//container.removeClass( 'loading' );
+			//jQuery( '.messi-box' ).hide();
+			jQuery( '.list-loader' ).hide();
 		});
 	}
 	
